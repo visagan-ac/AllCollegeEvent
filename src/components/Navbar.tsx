@@ -55,11 +55,6 @@ export default function Navbar() {
                   <span className="text-[11px] text-slate-400 hidden sm:inline-block">AI-Driven Opportunity Intelligence</span>
                 </div>
               </Link>
-
-              <div className="hidden lg:flex items-center gap-1.5 ml-2 px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-300 text-xs font-medium">
-                <Trophy className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
-                <span>National Grand Hackathon 2026</span>
-              </div>
             </div>
 
             {/* Navigation Center */}
