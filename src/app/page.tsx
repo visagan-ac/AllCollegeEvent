@@ -14,7 +14,9 @@ import {
   ArrowRight, 
   MessageSquare, 
   SlidersHorizontal,
-  Bot
+  Bot,
+  MapPin,
+  ChevronDown
 } from 'lucide-react';
 
 export default function HomePage() {
@@ -29,6 +31,7 @@ export default function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [selectedMode, setSelectedMode] = useState<string>('All');
   const [sortBy, setSortBy] = useState<'match' | 'trust' | 'date'>('match');
+  const [visibleCount, setVisibleCount] = useState<number>(24);
 
   // Modals state
   const [explainingRecommendation, setExplainingRecommendation] = useState<RecommendationScore | null>(null);
@@ -42,7 +45,12 @@ export default function HomePage() {
     'Cybersecurity',
     'Data Science & Analytics',
     'Robotics & IoT',
-    'Mobile & App Dev'
+    'Mobile & App Dev',
+    'Competitive Coding',
+    'AR/VR & Game Dev',
+    'FinTech & Algorithmic Trading',
+    'BioTech & Computational Health',
+    'CleanTech & Sustainable Smart Grid'
   ];
 
   const modes = ['All', 'Offline', 'Virtual', 'Hybrid'];
@@ -53,6 +61,7 @@ export default function HomePage() {
     const title = (event?.title || '').toLowerCase();
     const desc = (event?.description || '').toLowerCase();
     const orgName = (event?.organizer?.name || '').toLowerCase();
+    const loc = (event?.location || (event as any)?.locationVenue || '').toLowerCase();
     const skills = event?.requiredSkills || [];
 
     const matchesSearch = 
@@ -60,6 +69,7 @@ export default function HomePage() {
       title.includes(q) ||
       desc.includes(q) ||
       orgName.includes(q) ||
+      loc.includes(q) ||
       skills.some(s => (s || '').toLowerCase().includes(q));
 
     const matchesCategory = selectedCategory === 'All' || event?.category === selectedCategory;
@@ -79,6 +89,8 @@ export default function HomePage() {
     }
   };
 
+  const paginatedRecommendations = filteredRecommendations.slice(0, visibleCount);
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
       
@@ -90,7 +102,7 @@ export default function HomePage() {
           <div className="max-w-2xl space-y-4">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-purple-500/20 to-cyan-500/20 border border-purple-500/30 text-xs font-bold text-purple-300">
               <Sparkles className="w-3.5 h-3.5 text-cyan-400 animate-spin" />
-              <span>AI-Driven Opportunity Ecosystem • AllCollegeEvent 2026</span>
+              <span>National Collegiate Opportunity Ecosystem • 2,000+ Live Events</span>
             </div>
 
             <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight font-display leading-[1.15]">
@@ -98,7 +110,7 @@ export default function HomePage() {
             </h1>
 
             <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
-              Connect to high-impact hackathons, conferences, workshops, and internships tailored specifically to your branch, verified skills, and career trajectory.
+              Connect to 2,000+ high-impact hackathons, conferences, workshops, and internships across 22 major hubs in India & globally — tailored specifically to your branch, skills, and dream career.
             </p>
 
             {/* Quick Hero CTA Buttons */}
@@ -107,13 +119,13 @@ export default function HomePage() {
                 href="#discovery-feed"
                 className="px-6 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs sm:text-sm transition-all shadow-lg shadow-purple-900/40 flex items-center gap-2"
               >
-                <span>Explore Matched Events</span>
+                <span>Explore 2,000+ Opportunities</span>
                 <ArrowRight className="w-4 h-4" />
               </a>
 
               <div className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-purple-500/10 border border-purple-500/30 text-xs font-semibold text-purple-300">
                 <Bot className="w-4 h-4 text-cyan-400 animate-pulse" />
-                <span>AI Copilot Chatbot Active in Bottom Corner</span>
+                <span>AI Chatbot Active (Bottom Right)</span>
               </div>
             </div>
           </div>
@@ -121,20 +133,20 @@ export default function HomePage() {
           {/* Platform Metrics Card */}
           <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:w-80 flex-shrink-0">
             <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 text-center">
-              <div className="text-2xl sm:text-3xl font-extrabold text-white font-display">1,500+</div>
-              <div className="text-xs text-slate-400 mt-0.5">Verified Events</div>
+              <div className="text-2xl sm:text-3xl font-extrabold text-white font-display">2,000+</div>
+              <div className="text-xs text-slate-400 mt-0.5">Verified Opportunities</div>
             </div>
             <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 text-center">
-              <div className="text-2xl sm:text-3xl font-extrabold text-cyan-400 font-display">98.4%</div>
+              <div className="text-2xl sm:text-3xl font-extrabold text-cyan-400 font-display">22+</div>
+              <div className="text-xs text-slate-400 mt-0.5">Major Tech Cities</div>
+            </div>
+            <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 text-center">
+              <div className="text-2xl sm:text-3xl font-extrabold text-purple-400 font-display">12</div>
+              <div className="text-xs text-slate-400 mt-0.5">Core Tech Domains</div>
+            </div>
+            <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 text-center">
+              <div className="text-2xl sm:text-3xl font-extrabold text-emerald-400 font-display">98.4%</div>
               <div className="text-xs text-slate-400 mt-0.5">Match Accuracy</div>
-            </div>
-            <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 text-center">
-              <div className="text-2xl sm:text-3xl font-extrabold text-purple-400 font-display">85,000+</div>
-              <div className="text-xs text-slate-400 mt-0.5">Students Matched</div>
-            </div>
-            <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 text-center">
-              <div className="text-2xl sm:text-3xl font-extrabold text-emerald-400 font-display">₹45L+</div>
-              <div className="text-xs text-slate-400 mt-0.5">Grants & Prizes</div>
             </div>
           </div>
         </div>
@@ -151,32 +163,30 @@ export default function HomePage() {
             />
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-sm font-bold text-white">{user.name}</h2>
-                <span className="text-[11px] px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-300 font-mono">
-                  Year {user.yearOfStudy} • {user.department.split(' ')[0]}
-                </span>
-                <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 font-semibold">
+                <h3 className="text-base font-bold text-white">{user.name}</h3>
+                <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 text-[11px] font-semibold">
                   Profile Active
                 </span>
               </div>
               <p className="text-xs text-slate-400 mt-0.5">
-                Target Role: <strong className="text-purple-300">{user.careerGoals[0]}</strong> • {user.skills.length} skills calibrated
+                {user.department} • {user.college} • Target: <strong className="text-cyan-400">{user.careerGoals[0]}</strong>
               </p>
             </div>
           </div>
         ) : (
           <div>
-            <h2 className="text-sm font-bold text-white">Create Your Student AI Profile</h2>
-            <p className="text-xs text-slate-400">Sign up with Google or verify your email to get personalized recommendations.</p>
+            <h3 className="text-base font-bold text-white">Browsing as Guest</h3>
+            <p className="text-xs text-slate-400 mt-0.5">
+              Sign in with Google or Email OTP to get your personalized AI match scores & instant event registrations.
+            </p>
           </div>
         )}
 
-        {/* Action Button */}
         <button
           onClick={() => setAuthModalOpen(true)}
-          className="px-4 py-2 rounded-xl bg-purple-600/20 hover:bg-purple-600/30 border border-purple-500/40 text-purple-300 text-xs font-semibold transition-all flex items-center gap-2"
+          className="px-5 py-2.5 rounded-xl bg-purple-600/30 hover:bg-purple-600/50 border border-purple-500/50 text-white text-xs font-bold transition-all shadow-md shadow-purple-900/20 flex items-center justify-center gap-2"
         >
-          <SlidersHorizontal className="w-3.5 h-3.5 text-cyan-400" />
+          <Sparkles className="w-4 h-4 text-cyan-400" />
           <span>{user ? 'Edit Skills & Career Goal' : 'Sign Up with Google / Email'}</span>
         </button>
       </div>
@@ -202,9 +212,12 @@ export default function HomePage() {
               <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
-                placeholder="Search skills, hackathons, college..."
+                placeholder="Search city, skills, hackathon..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  setVisibleCount(24);
+                }}
                 className="w-full pl-9 pr-3.5 py-2 rounded-xl bg-slate-900/90 border border-slate-700 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-purple-500"
               />
             </div>
@@ -227,7 +240,10 @@ export default function HomePage() {
           {categories.map((category) => (
             <button
               key={category}
-              onClick={() => setSelectedCategory(category)}
+              onClick={() => {
+                setSelectedCategory(category);
+                setVisibleCount(24);
+              }}
               className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
                 selectedCategory === category
                   ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md shadow-purple-900/30'
@@ -245,11 +261,14 @@ export default function HomePage() {
           {modes.map((mode) => (
             <button
               key={mode}
-              onClick={() => setSelectedMode(mode)}
+              onClick={() => {
+                setSelectedMode(mode);
+                setVisibleCount(24);
+              }}
               className={`px-2.5 py-1 rounded-lg transition-colors ${
                 selectedMode === mode
-                  ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 font-bold'
-                  : 'bg-slate-900 text-slate-400 hover:text-white'
+                  ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-semibold'
+                  : 'hover:text-white'
               }`}
             >
               {mode}
@@ -260,7 +279,7 @@ export default function HomePage() {
 
       {/* Event Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredRecommendations.map((rec) => (
+        {paginatedRecommendations.map((rec) => (
           <EventCard
             key={rec.event.id}
             recommendation={rec}
@@ -288,16 +307,30 @@ export default function HomePage() {
         ))}
       </div>
 
+      {/* Load More Button */}
+      {visibleCount < filteredRecommendations.length && (
+        <div className="text-center pt-4 pb-8">
+          <button
+            onClick={() => setVisibleCount(prev => prev + 24)}
+            className="px-8 py-3 rounded-2xl bg-slate-900 hover:bg-slate-800 border border-purple-500/40 hover:border-purple-500 text-white font-bold text-sm transition-all shadow-xl shadow-purple-950/40 inline-flex items-center gap-2"
+          >
+            <span>Load More Opportunities ({filteredRecommendations.length - visibleCount} remaining)</span>
+            <ChevronDown className="w-4 h-4" />
+          </button>
+        </div>
+      )}
+
       {filteredRecommendations.length === 0 && (
         <div className="p-12 rounded-3xl glass-panel border border-slate-800 text-center space-y-3">
           <Sparkles className="w-8 h-8 text-slate-500 mx-auto" />
           <h3 className="text-base font-bold text-white">No matching events found</h3>
-          <p className="text-xs text-slate-400">Try resetting category or search keywords to discover more opportunities.</p>
+          <p className="text-xs text-slate-400">Try resetting category, city, or search keywords to discover more opportunities.</p>
           <button
             onClick={() => {
               setSelectedCategory('All');
               setSelectedMode('All');
               setSearchQuery('');
+              setVisibleCount(24);
             }}
             className="px-4 py-2 rounded-xl bg-purple-600 text-white text-xs font-semibold"
           >
