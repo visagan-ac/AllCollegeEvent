@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
     let resendErrorMessage = '';
     const resendApiKey = process.env.RESEND_API_KEY;
 
-    // 4. Send real email via Resend if valid API key is present
+    // 4. Send real email via Resend
     if (resendApiKey && resendApiKey.startsWith('re_') && !resendApiKey.includes('your_resend_api_key')) {
       try {
         const resend = new Resend(resendApiKey);
@@ -69,17 +69,21 @@ export async function POST(req: NextRequest) {
         console.error('Error sending email via Resend:', emailErr);
         resendErrorMessage = emailErr?.message || 'Resend error';
       }
+    } else {
+      console.log(`[Dev Fallback] OTP for ${cleanEmail} is: ${otp}`);
+    }
+
+    if (!emailSent && resendErrorMessage) {
+      return NextResponse.json(
+        { error: `Email delivery error: ${resendErrorMessage}. Please check your Resend API key configuration.` },
+        { status: 400 }
+      );
     }
 
     return NextResponse.json({
       success: true,
-      message: emailSent
-        ? `Verification code sent to ${cleanEmail}`
-        : `Verification code generated for ${cleanEmail}`,
+      message: `Verification code sent to ${cleanEmail}`,
       emailSent,
-      resendErrorMessage: resendErrorMessage || undefined,
-      // Provide OTP code in UI so testing always works even if external SMTP is unconfigured
-      previewOtp: otp,
     });
   } catch (error: any) {
     console.error('Error in send-otp route:', error);

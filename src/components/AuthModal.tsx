@@ -308,29 +308,9 @@ export default function AuthModal() {
                 Enter Verification Code
               </h2>
               <p className="text-xs text-slate-300 mt-1">
-                {emailSentStatus
-                  ? `We sent a real 6-digit email code to ${email}`
-                  : `Enter the verification code for ${email}`}
+                We sent a 6-digit verification code to <strong className="text-cyan-300">{email}</strong>. Please check your inbox.
               </p>
             </div>
-
-            {/* OTP Preview Banner for Instant Testing */}
-            {sentOtpPreview && (
-              <div className="p-3.5 rounded-2xl bg-emerald-950/60 border border-emerald-500/40 text-center animate-in zoom-in-95">
-                <div className="text-xs text-emerald-300 font-medium">
-                  🔑 Verification Code Generated:
-                </div>
-                <div className="text-2xl font-black font-mono tracking-widest text-white mt-1">
-                  {sentOtpPreview}
-                </div>
-                <button
-                  onClick={() => setOtp(sentOtpPreview || '')}
-                  className="text-[11px] text-cyan-400 hover:underline mt-1 inline-block"
-                >
-                  Auto-fill Code
-                </button>
-              </div>
-            )}
 
             <form onSubmit={handleVerifyOtp} className="space-y-4">
               <div>
