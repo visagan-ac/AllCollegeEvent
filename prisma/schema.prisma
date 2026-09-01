@@ -1,0 +1,192 @@
+// Prisma Schema for PostgreSQL
+// AllCollegeEvent-AI Platform
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  STUDENT
+  ORGANIZER
+  MENTOR
+  RECRUITER
+  ADMIN
+}
+
+enum EventMode {
+  Offline
+  Virtual
+  Hybrid
+}
+
+enum DifficultyLevel {
+  Beginner
+  Intermediate
+  Advanced
+  EliteChampionship
+}
+
+model User {
+  id               String                 @id @default(uuid())
+  email            String                 @unique
+  fullName         String
+  role             UserRole               @default(STUDENT)
+  avatarUrl        String?
+  collegeName      String?
+  department       String?
+  yearOfStudy      Int?                   @default(1)
+  cgpa             Float?                 @default(8.5)
+  locationCity     String?
+  locationState    String?
+  preferredMode    EventMode              @default(Hybrid)
+  careerGoals      String[]
+  targetCompanies  String[]
+  skills           UserSkill[]
+  interactions     UserEventInteraction[]
+  recommendations  AIRecommendation[]
+  organizerProfile Organizer?
+  createdAt        DateTime               @default(now())
+  updatedAt        DateTime               @updatedAt
+
+  @@map("users")
+}
+
+model Skill {
+  id          String       @id @default(uuid())
+  name        String       @unique
+  category    String
+  demandIndex Float        @default(1.0)
+  userSkills  UserSkill[]
+  eventSkills EventSkill[]
+  createdAt   DateTime     @default(now())
+
+  @@map("skills")
+}
+
+model UserSkill {
+  id               String   @id @default(uuid())
+  userId           String
+  skillId          String
+  proficiencyLevel String   @default("Intermediate") // Beginner, Intermediate, Expert
+  proficiencyScore Int      @default(75)             // 0 - 100
+  verified         Boolean  @default(false)
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  skill            Skill    @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  createdAt        DateTime @default(now())
+
+  @@unique([userId, skillId])
+  @@map("user_skills")
+}
+
+model Organizer {
+  id                   String   @id @default(uuid())
+  userId               String   @unique
+  organizationName     String
+  collegeAffiliation   String?
+  isVerified           Boolean  @default(false)
+  trustReputationScore Float    @default(85.0)
+  totalEventsHosted    Int      @default(0)
+  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  events               Event[]
+  createdAt            DateTime @default(now())
+
+  @@map("organizers")
+}
+
+model Event {
+  id                   String                 @id @default(uuid())
+  organizerId          String?
+  title                String
+  slug                 String                 @unique
+  type                 String                 // Hackathon, Workshop, Conference, etc.
+  category             String                 // AI & Machine Learning, Full Stack & Web3, etc.
+  mode                 EventMode              @default(Hybrid)
+  locationVenue        String?
+  city                 String?
+  startDate            DateTime
+  endDate              DateTime
+  duration             String?
+  registrationDeadline DateTime
+  description          String
+  shortSummary         String
+  prizePool            String?
+  prizeDetails         Json?
+  perks                String[]
+  eligibilityCriteria  String[]
+  difficultyLevel      DifficultyLevel        @default(Intermediate)
+  targetAudience       String[]
+  careerRelevance      String[]
+  trustScore           Float                  @default(85.0)
+  trustBreakdown       Json?                  // { organizerReputation, curriculumDepth, prizeVerification, mentorshipQuality }
+  isFeatured           Boolean                @default(false)
+  maxCapacity          Int?
+  currentRegistrations Int                    @default(0)
+  syllabus             Json?
+  mentors              Json?
+  organizer            Organizer?             @relation(fields: [organizerId], references: [id], onDelete: SetNull)
+  skills               EventSkill[]
+  interactions         UserEventInteraction[]
+  recommendations      AIRecommendation[]
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime               @updatedAt
+
+  @@index([category])
+  @@index([mode])
+  @@index([startDate])
+  @@index([trustScore])
+  @@map("events")
+}
+
+model EventSkill {
+  id               String   @id @default(uuid())
+  eventId          String
+  skillId          String
+  skillType        String   // prerequisite, gained
+  importanceWeight Float    @default(1.0)
+  event            Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  skill            Skill    @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  createdAt        DateTime @default(now())
+
+  @@unique([eventId, skillId, skillType])
+  @@map("event_skills")
+}
+
+model UserEventInteraction {
+  id              String   @id @default(uuid())
+  userId          String
+  eventId         String
+  interactionType String   // view, bookmark, apply, register, attend, win
+  dwellTimeSecs   Int      @default(0)
+  metadata        Json?
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  event           Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  createdAt       DateTime @default(now())
+
+  @@index([userId, eventId])
+  @@map("user_event_interactions")
+}
+
+model AIRecommendation {
+  id                 String   @id @default(uuid())
+  userId             String
+  eventId            String
+  matchScore         Float    // 0 - 100%
+  scoreBreakdown     Json     // { skillMatchScore, careerGoalScore, departmentAffinity, ... }
+  matchedSkills      String[]
+  missingSkills      String[]
+  explanationText    String
+  careerBridgeImpact String?
+  matchTier          String   // Perfect Match, High Potential, Skill Builder, Exploratory
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  event              Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  generatedAt        DateTime @default(now())
+
+  @@unique([userId, eventId])
+  @@index([userId, matchScore])
+  @@map("ai_recommendations")
+}
