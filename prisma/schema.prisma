@@ -56,6 +56,17 @@ model User {
   @@map("users")
 }
 
+model OtpVerification {
+  id        String   @id @default(uuid())
+  email     String
+  otp       String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([email])
+  @@map("otp_verifications")
+}
+
 model Skill {
   id          String       @id @default(uuid())
   name        String       @unique
