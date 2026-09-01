@@ -32,13 +32,14 @@ export async function POST(req: NextRequest) {
     });
 
     let emailSent = false;
+    let resendErrorMessage = '';
     const resendApiKey = process.env.RESEND_API_KEY;
 
-    // 4. Send real email via Resend if API key is provided
-    if (resendApiKey && !resendApiKey.includes('your_api_key')) {
+    // 4. Send real email via Resend if valid API key is present
+    if (resendApiKey && resendApiKey.startsWith('re_') && !resendApiKey.includes('your_resend_api_key')) {
       try {
         const resend = new Resend(resendApiKey);
-        await resend.emails.send({
+        const sendResult = await resend.emails.send({
           from: 'AllCollegeEvent <onboarding@resend.dev>',
           to: cleanEmail,
           subject: `${otp} is your AllCollegeEvent Verification Code`,
@@ -57,9 +58,16 @@ export async function POST(req: NextRequest) {
             </div>
           `,
         });
-        emailSent = true;
-      } catch (emailErr) {
+
+        if (sendResult.data && sendResult.data.id) {
+          emailSent = true;
+        } else if (sendResult.error) {
+          console.error('Resend delivery error:', sendResult.error);
+          resendErrorMessage = sendResult.error.message || 'Delivery failed';
+        }
+      } catch (emailErr: any) {
         console.error('Error sending email via Resend:', emailErr);
+        resendErrorMessage = emailErr?.message || 'Resend error';
       }
     }
 
@@ -69,8 +77,9 @@ export async function POST(req: NextRequest) {
         ? `Verification code sent to ${cleanEmail}`
         : `Verification code generated for ${cleanEmail}`,
       emailSent,
-      // If Resend API key is not yet set, provide OTP for instant dev testing
-      previewOtp: !emailSent ? otp : undefined,
+      resendErrorMessage: resendErrorMessage || undefined,
+      // Provide OTP code in UI so testing always works even if external SMTP is unconfigured
+      previewOtp: otp,
     });
   } catch (error: any) {
     console.error('Error in send-otp route:', error);
