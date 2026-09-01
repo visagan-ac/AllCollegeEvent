@@ -30,10 +30,9 @@ export default function AuthModal() {
   const [authMethod, setAuthMethod] = useState<'options' | 'email_otp' | 'onboarding'>('options');
   const [email, setEmail] = useState('');
   const [otp, setOtp] = useState('');
-  const [sentOtpPreview, setSentOtpPreview] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
-  const [emailSentStatus, setEmailSentStatus] = useState<boolean>(false);
+  const [avatar, setAvatar] = useState('');
 
   // Onboarding profile state
   const [name, setName] = useState('');
@@ -62,31 +61,41 @@ export default function AuthModal() {
           body: JSON.stringify({ credential: credentialResponse.credential }),
         });
         const data = await res.json();
-        if (data.success && data.user) {
-          loginWithGoogle({
-            name: data.user.name,
-            email: data.user.email,
-            avatar: data.user.avatar,
-          });
+
+        if (data.success) {
+          if (!data.isNewUser && data.user) {
+            // Existing student — log in directly
+            loginWithGoogle({
+              name: data.user.name,
+              email: data.user.email,
+              avatar: data.user.avatar,
+            });
+            return;
+          }
+
+          // New student signup — show Profile Creation Onboarding!
+          setName(data.name || '');
+          setEmail(data.email || '');
+          setAvatar(data.avatar || '');
+          setAuthMethod('onboarding');
           return;
         }
       }
-      // Fallback 1-click login
-      loginWithGoogle();
-    } catch {
-      loginWithGoogle();
+      // Fallback
+      setAuthMethod('onboarding');
+    } catch (err: any) {
+      setErrorMsg(err?.message || 'Error signing in with Google.');
     } finally {
       setLoading(false);
     }
   };
 
-  // 1-Click Instant Google Sign-In Fallback
+  // 1-Click Instant Demo Login (Takes to onboarding or direct login)
   const handleSimulatedGoogleSignIn = () => {
-    loginWithGoogle({
-      name: 'Visagan A C',
-      email: 'visagan.ac@college.edu',
-      avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80'
-    });
+    setName('Visagan A C');
+    setEmail('visagan.ac@college.edu');
+    setAvatar('https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80');
+    setAuthMethod('onboarding');
   };
 
   // Send Real Email OTP
@@ -113,10 +122,6 @@ export default function AuthModal() {
         return;
       }
 
-      setEmailSentStatus(Boolean(data.emailSent));
-      if (data.previewOtp) {
-        setSentOtpPreview(data.previewOtp);
-      }
       setAuthMethod('email_otp');
     } catch (err: any) {
       setErrorMsg(err?.message || 'Error connecting to OTP server.');
@@ -150,7 +155,7 @@ export default function AuthModal() {
         return;
       }
 
-      // If user already had a profile in Neon PostgreSQL
+      // If user already had a completed profile in Neon PostgreSQL
       if (!data.isNewUser && data.user) {
         loginWithGoogle({
           name: data.user.name,
@@ -160,7 +165,8 @@ export default function AuthModal() {
         return;
       }
 
-      // If brand new user, advance to profile onboarding step
+      // If new student, show Profile Creation wizard
+      setName(email.split('@')[0].replace(/[^a-zA-Z]/g, ' '));
       setAuthMethod('onboarding');
     } catch (err: any) {
       setErrorMsg(err?.message || 'Error verifying OTP code.');
@@ -184,6 +190,7 @@ export default function AuthModal() {
     completeOnboarding({
       name: name.trim() || 'Collegiate Innovator',
       email,
+      avatar: avatar || `https://api.dicebear.com/7.x/bottts/svg?seed=${name || 'student'}`,
       college: college.trim() || 'National Institute of Technology',
       department,
       yearOfStudy,
@@ -242,7 +249,7 @@ export default function AuthModal() {
                 onClick={handleSimulatedGoogleSignIn}
                 className="w-full py-2.5 px-4 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-slate-300 hover:text-white text-xs font-semibold flex items-center justify-center gap-2 transition-all"
               >
-                <span>⚡ Instant 1-Click Demo Login</span>
+                <span>⚡ Instant 1-Click Demo Sign Up</span>
               </button>
 
               <div className="relative flex py-2 items-center">
@@ -378,10 +385,10 @@ export default function AuthModal() {
                 </div>
               </div>
               <h2 className="text-xl font-extrabold text-white mt-3 font-display">
-                Complete Student Profile
+                Create Your Student Profile
               </h2>
               <p className="text-xs text-slate-300 mt-1">
-                Tailor your AI recommendations & save profile to Neon PostgreSQL
+                Tell us about your college & skills so AI can tailor your opportunities
               </p>
             </div>
 
@@ -432,9 +439,22 @@ export default function AuthModal() {
                 </div>
               </div>
 
+              {/* Department */}
+              <div>
+                <label className="text-xs text-slate-300 font-semibold block mb-1">Department / Branch</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Computer Science, AI & Data Science, ECE"
+                  value={department}
+                  onChange={(e) => setDepartment(e.target.value)}
+                  className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-500"
+                />
+              </div>
+
               {/* Target Career Goal */}
               <div>
-                <label className="text-xs text-slate-300 font-semibold block mb-1">Target Career Trajectory</label>
+                <label className="text-xs text-slate-300 font-semibold block mb-1">Target Career Role / Goal</label>
                 <div className="relative">
                   <Target className="w-4 h-4 text-purple-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                   <input
@@ -450,7 +470,7 @@ export default function AuthModal() {
 
               {/* Skills Tags Manager */}
               <div>
-                <label className="text-xs text-slate-300 font-semibold block mb-1">Verified Technical Skills</label>
+                <label className="text-xs text-slate-300 font-semibold block mb-1">Your Technical Skills</label>
                 <div className="flex gap-2 mb-2">
                   <input
                     type="text"

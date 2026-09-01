@@ -29,25 +29,9 @@ export async function POST(req: NextRequest) {
 
     const cleanEmail = email.trim().toLowerCase();
 
-    // 1. Upsert User in Neon PostgreSQL
-    const savedUser = await prisma.user.upsert({
+    // Check if user already exists in Neon PostgreSQL
+    const existingUser = await prisma.user.findUnique({
       where: { email: cleanEmail },
-      update: {
-        fullName: name,
-        avatarUrl: avatar,
-      },
-      create: {
-        email: cleanEmail,
-        fullName: name,
-        avatarUrl: avatar,
-        collegeName: 'National Institute of Technology',
-        department: 'Computer Science & Engineering (AI & ML)',
-        yearOfStudy: 3,
-        cgpa: 8.9,
-        locationCity: 'Hyderabad',
-        careerGoals: ['AI/ML Engineer', 'Full Stack AI Developer'],
-        targetCompanies: ['Google', 'OpenAI', 'Microsoft'],
-      },
       include: {
         skills: {
           include: {
@@ -58,71 +42,47 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // 2. If new user without skills, add standard starter skills
-    if (savedUser.skills.length === 0) {
-      const defaultSkills = [
-        { name: 'Python', category: 'Programming', level: 'Expert', score: 92 },
-        { name: 'Machine Learning', category: 'AI', level: 'Intermediate', score: 85 },
-        { name: 'PyTorch', category: 'AI Frameworks', level: 'Intermediate', score: 75 },
-        { name: 'React / Next.js', category: 'Frontend', level: 'Intermediate', score: 70 },
-        { name: 'Git', category: 'DevOps', level: 'Expert', score: 90 },
-      ];
+    if (existingUser && existingUser.collegeName) {
+      // Existing registered student profile
+      const studentProfile = {
+        id: existingUser.id,
+        name: existingUser.fullName,
+        email: existingUser.email,
+        avatar: existingUser.avatarUrl || avatar,
+        college: existingUser.collegeName,
+        department: existingUser.department || 'Computer Science & Engineering',
+        yearOfStudy: existingUser.yearOfStudy || 3,
+        cgpa: existingUser.cgpa || 8.5,
+        location: existingUser.locationCity ? `${existingUser.locationCity}, ${existingUser.locationState || 'India'}` : 'India',
+        skills: existingUser.skills.map((s: any) => ({
+          name: s.skill?.name || 'Skill',
+          level: s.proficiencyLevel || 'Intermediate',
+          score: s.proficiencyScore || 75,
+        })),
+        interests: existingUser.careerGoals || [],
+        careerGoals: existingUser.careerGoals || ['Software Engineer'],
+        targetCompanies: existingUser.targetCompanies || ['Google', 'Microsoft'],
+        preferredMode: existingUser.preferredMode || 'All',
+        previousEvents: [],
+        bookmarkedEventIds: existingUser.interactions.filter((i: any) => i.interactionType === 'bookmark').map((i: any) => i.eventId),
+        registeredEventIds: existingUser.interactions.filter((i: any) => i.interactionType === 'register').map((i: any) => i.eventId),
+      };
 
-      for (const s of defaultSkills) {
-        const skill = await prisma.skill.upsert({
-          where: { name: s.name },
-          update: {},
-          create: { name: s.name, category: s.category, demandIndex: 1.2 },
-        });
-
-        await prisma.userSkill.upsert({
-          where: {
-            userId_skillId: {
-              userId: savedUser.id,
-              skillId: skill.id,
-            },
-          },
-          update: {},
-          create: {
-            userId: savedUser.id,
-            skillId: skill.id,
-            proficiencyLevel: s.level,
-            proficiencyScore: s.score,
-          },
-        });
-      }
+      return NextResponse.json({
+        success: true,
+        isNewUser: false,
+        user: studentProfile,
+      });
     }
 
-    // 3. Format StudentProfile object
-    const studentProfile = {
-      id: savedUser.id,
-      name: savedUser.fullName,
-      email: savedUser.email,
-      avatar: savedUser.avatarUrl || avatar,
-      college: savedUser.collegeName || 'National Institute of Technology',
-      department: savedUser.department || 'Computer Science & Engineering',
-      yearOfStudy: savedUser.yearOfStudy || 3,
-      cgpa: savedUser.cgpa || 8.9,
-      location: savedUser.locationCity || 'Hyderabad, India',
-      skills: [
-        { name: 'Python', level: 'Expert' as const, score: 92 },
-        { name: 'Machine Learning', level: 'Intermediate' as const, score: 85 },
-        { name: 'PyTorch', level: 'Intermediate' as const, score: 75 },
-        { name: 'React / Next.js', level: 'Intermediate' as const, score: 70 },
-        { name: 'Git', level: 'Expert' as const, score: 90 },
-      ],
-      interests: savedUser.careerGoals || ['Artificial Intelligence', 'Hackathons'],
-      careerGoals: savedUser.careerGoals || ['AI/ML Engineer'],
-      targetCompanies: savedUser.targetCompanies || ['Google', 'OpenAI', 'Microsoft'],
-      preferredMode: savedUser.preferredMode || 'All',
-      previousEvents: [],
-      bookmarkedEventIds: savedUser.interactions.filter((i: any) => i.interactionType === 'bookmark').map((i: any) => i.eventId),
-      registeredEventIds: savedUser.interactions.filter((i: any) => i.interactionType === 'register').map((i: any) => i.eventId),
-    };
-
+    // New Google Signup — prompt for profile onboarding
     return NextResponse.json({
       success: true,
-      user: studentProfile,
+      isNewUser: true,
+      name,
+      email: cleanEmail,
+      avatar,
+      message: 'Google authenticated. Please complete your profile.',
     });
   } catch (error: any) {
     console.error('Error in Google auth route:', error);
