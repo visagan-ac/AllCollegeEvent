@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useApp } from '@/context/AppContext';
 import AuthModal from '@/components/AuthModal';
-import DatabaseStatusBadge from '@/components/DatabaseStatusBadge';
 import { 
   Sparkles, 
   Compass, 
@@ -77,9 +76,8 @@ export default function Navbar() {
             {/* User Session / Sign Up Controls */}
             <div className="flex items-center gap-3">
               
-              {/* Database Status Indicator & Quick Stats */}
+              {/* Quick Stats */}
               <div className="flex items-center gap-2 text-xs">
-                <DatabaseStatusBadge />
                 <div className="hidden md:flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800/80 border border-slate-700 text-slate-300">
                   <Bookmark className="w-3 h-3 text-purple-400" />
                   <span>{bookmarkedEventIds.length} Saved</span>
