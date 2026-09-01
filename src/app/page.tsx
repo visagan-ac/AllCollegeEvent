@@ -49,20 +49,27 @@ export default function HomePage() {
 
   // Filter recommendations
   const filteredRecommendations = rankedRecommendations.filter(({ event }) => {
-    const matchesSearch = 
-      event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      event.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      event.organizer.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      event.requiredSkills.some(s => s.toLowerCase().includes(searchQuery.toLowerCase()));
+    const q = (searchQuery || '').toLowerCase();
+    const title = (event?.title || '').toLowerCase();
+    const desc = (event?.description || '').toLowerCase();
+    const orgName = (event?.organizer?.name || '').toLowerCase();
+    const skills = event?.requiredSkills || [];
 
-    const matchesCategory = selectedCategory === 'All' || event.category === selectedCategory;
-    const matchesMode = selectedMode === 'All' || event.mode === selectedMode;
+    const matchesSearch = 
+      !q ||
+      title.includes(q) ||
+      desc.includes(q) ||
+      orgName.includes(q) ||
+      skills.some(s => (s || '').toLowerCase().includes(q));
+
+    const matchesCategory = selectedCategory === 'All' || event?.category === selectedCategory;
+    const matchesMode = selectedMode === 'All' || event?.mode === selectedMode;
 
     return matchesSearch && matchesCategory && matchesMode;
   }).sort((a, b) => {
-    if (sortBy === 'trust') return b.event.trustScore - a.event.trustScore;
-    if (sortBy === 'date') return new Date(a.event.startDate).getTime() - new Date(b.event.startDate).getTime();
-    return b.matchScore - a.matchScore;
+    if (sortBy === 'trust') return (b.event?.trustScore || 0) - (a.event?.trustScore || 0);
+    if (sortBy === 'date') return new Date(a.event?.startDate || 0).getTime() - new Date(b.event?.startDate || 0).getTime();
+    return (b.matchScore || 0) - (a.matchScore || 0);
   });
 
   const handleOpenEventById = (eventId: string) => {
