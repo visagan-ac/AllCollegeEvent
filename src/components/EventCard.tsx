@@ -120,7 +120,7 @@ export default function EventCard({ recommendation, student, onOpenDetail, onOpe
           </div>
           <div className="flex items-center gap-1.5">
             <MapPin className="w-3.5 h-3.5 text-rose-400" />
-            <span className="truncate">{event.location.split(',')[0]}</span>
+            <span className="truncate">{(event.location || (event as any).locationVenue || 'Hybrid / Online').split(',')[0]}</span>
           </div>
         </div>
 
@@ -128,11 +128,12 @@ export default function EventCard({ recommendation, student, onOpenDetail, onOpe
         <div className="mt-3 pt-3 border-t border-slate-800/80">
           <div className="flex items-center justify-between text-[11px] text-slate-400 mb-1.5">
             <span className="font-semibold">Key Technologies:</span>
-            <span className="text-cyan-400 font-mono">{matchedSkills.length} of your skills match</span>
+            <span className="text-cyan-400 font-mono">{(matchedSkills || []).length} of your skills match</span>
           </div>
           <div className="flex flex-wrap gap-1">
-            {event.requiredSkills.slice(0, 3).map((skill, idx) => {
-              const hasSkill = student.skills.some(s => s.name.toLowerCase() === skill.toLowerCase());
+            {(event.requiredSkills || []).slice(0, 3).map((skill, idx) => {
+              const studentSkills = student?.skills || [];
+              const hasSkill = studentSkills.some(s => (s?.name || '').toLowerCase() === (skill || '').toLowerCase());
               return (
                 <span 
                   key={idx} 
@@ -146,9 +147,9 @@ export default function EventCard({ recommendation, student, onOpenDetail, onOpe
                 </span>
               );
             })}
-            {event.requiredSkills.length > 3 && (
+            {(event.requiredSkills || []).length > 3 && (
               <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-slate-800 text-slate-400">
-                +{event.requiredSkills.length - 3}
+                +{(event.requiredSkills || []).length - 3}
               </span>
             )}
           </div>

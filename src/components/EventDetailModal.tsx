@@ -233,7 +233,7 @@ export default function EventDetailModal({ event, student, matchScore, onClose, 
             <div className="flex items-center gap-3">
               <CheckCircle className="w-6 h-6 text-emerald-400 flex-shrink-0" />
               <div>
-                <h4 className="text-sm font-bold text-white">Registration Confirmed for {student.name}!</h4>
+                <h4 className="text-sm font-bold text-white">Registration Confirmed for {student?.name || 'Student Innovator'}!</h4>
                 <p className="text-xs text-emerald-300 mt-0.5">
                   Your entry pass ID: <strong className="font-mono text-white">{ticketId}</strong>. Synchronized with your active student dashboard profile.
                 </p>

@@ -37,14 +37,14 @@ export default function AIExplainerModal({ recommendation, student, onClose }: A
       score: breakdown.careerGoalScore,
       icon: TrendingUp,
       color: 'from-cyan-500 to-blue-500',
-      description: `Matches event outcomes to your goal: "${student.careerGoals[0]}".`
+      description: `Matches event outcomes to your goal: "${student?.careerGoals?.[0] || 'Software Engineer'}".`
     },
     {
       label: 'Department & Academic Affinity (15% wt)',
       score: breakdown.departmentAffinity,
       icon: GraduationCap,
       color: 'from-emerald-500 to-teal-500',
-      description: `Synergy between ${student.department} and ${event.category}.`
+      description: `Synergy between ${student?.department || 'Engineering'} and ${event.category}.`
     },
     {
       label: 'User Interest & Past Profile (18% wt)',
@@ -92,7 +92,7 @@ export default function AIExplainerModal({ recommendation, student, onClose }: A
               Why was <span className="text-cyan-300">{event.title}</span> recommended to you?
             </h2>
             <p className="text-xs text-slate-400 mt-1">
-              Personalized for <strong className="text-slate-200">{student.name}</strong> ({student.department} • Year {student.yearOfStudy})
+              Personalized for <strong className="text-slate-200">{student?.name || 'Student Innovator'}</strong> ({student?.department || 'Engineering'} • Year {student?.yearOfStudy || 1})
             </p>
           </div>
         </div>

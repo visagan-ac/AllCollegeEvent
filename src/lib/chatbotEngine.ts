@@ -142,7 +142,10 @@ export function generateAIResponse(
   const matchedEvents: EventItem[] = [];
   events.forEach(evt => {
     let score = 0;
-    const searchable = `${evt.title} ${evt.description} ${evt.category} ${evt.requiredSkills.join(' ')} ${evt.skillsGained.join(' ')} ${evt.location} ${evt.type}`.toLowerCase();
+    const reqSkillsStr = (evt.requiredSkills || []).join(' ');
+    const gainedSkillsStr = (evt.skillsGained || []).join(' ');
+    const loc = evt.location || (evt as any).locationVenue || '';
+    const searchable = `${evt.title || ''} ${evt.description || ''} ${evt.category || ''} ${reqSkillsStr} ${gainedSkillsStr} ${loc} ${evt.type || ''}`.toLowerCase();
     const words = query.split(/\s+/).filter(w => w.length > 2);
     words.forEach(w => {
       if (searchable.includes(w)) score += 2;
