@@ -81,7 +81,6 @@ export default function AuthModal() {
           return;
         }
       }
-      // Fallback
       setAuthMethod('onboarding');
     } catch (err: any) {
       setErrorMsg(err?.message || 'Error signing in with Google.');
@@ -133,8 +132,9 @@ export default function AuthModal() {
   // Verify Real Email OTP
   const handleVerifyOtp = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!otp.trim()) {
-      setErrorMsg('Please enter the 6-digit code.');
+    const clean = (otp || '').replace(/\s/g, '');
+    if (clean.length < 6) {
+      setErrorMsg('Please enter the 6-digit code sent to your email.');
       return;
     }
 
@@ -145,7 +145,7 @@ export default function AuthModal() {
       const res = await fetch('/api/auth/verify-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, otp: otp.trim() }),
+        body: JSON.stringify({ email, otp: clean }),
       });
       const data = await res.json();
 
@@ -155,7 +155,7 @@ export default function AuthModal() {
         return;
       }
 
-      // If user already had a completed profile in Neon PostgreSQL
+      // If user already had a completed profile in database
       if (!data.isNewUser && data.user) {
         loginWithGoogle({
           name: data.user.name,
@@ -200,13 +200,13 @@ export default function AuthModal() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-full max-w-lg rounded-3xl glass-panel border border-purple-500/30 p-6 sm:p-8 shadow-2xl shadow-purple-950/60 max-h-[92vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="relative w-full max-w-lg rounded-3xl bg-white border border-slate-200 p-6 sm:p-8 shadow-2xl shadow-slate-900/20 max-h-[92vh] overflow-y-auto text-slate-900">
         
         {/* Close button */}
         <button
           onClick={() => setAuthModalOpen(false)}
-          className="absolute top-5 right-5 p-2 rounded-xl bg-slate-800/80 text-slate-400 hover:text-white hover:bg-slate-700 transition-colors"
+          className="absolute top-5 right-5 p-2 rounded-xl bg-slate-100 text-slate-500 hover:text-slate-900 hover:bg-slate-200 transition-colors"
         >
           <X className="w-5 h-5" />
         </button>
@@ -216,16 +216,16 @@ export default function AuthModal() {
           <div className="space-y-6">
             
             <div className="text-center">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-cyan-400 p-[1px] mx-auto shadow-lg shadow-purple-500/30">
-                <div className="w-full h-full bg-[#0d1222] rounded-[15px] flex items-center justify-center">
-                  <Sparkles className="w-6 h-6 text-cyan-400" />
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-600 to-sky-500 p-[1px] mx-auto shadow-md shadow-indigo-100">
+                <div className="w-full h-full bg-white rounded-[15px] flex items-center justify-center">
+                  <Sparkles className="w-6 h-6 text-indigo-600" />
                 </div>
               </div>
-              <h2 className="text-xl sm:text-2xl font-extrabold text-white mt-3 font-display">
-                Sign In to AllCollegeEvent<span className="text-cyan-400">.ai</span>
+              <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 mt-3 font-display">
+                Sign In to AllCollegeEvent<span className="text-indigo-600">.ai</span>
               </h2>
-              <p className="text-xs text-slate-300 mt-1">
-                Personalized AI opportunity feeds & live Neon PostgreSQL profile sync
+              <p className="text-xs text-slate-500 mt-1">
+                Personalized AI opportunity feeds & live profile sync
               </p>
             </div>
 
@@ -237,7 +237,7 @@ export default function AuthModal() {
                   onError={() => {
                     handleSimulatedGoogleSignIn();
                   }}
-                  theme="filled_black"
+                  theme="outline"
                   shape="pill"
                   size="large"
                   text="continue_with"
@@ -247,21 +247,21 @@ export default function AuthModal() {
               {/* 1-Click Instant Sign-In Button */}
               <button
                 onClick={handleSimulatedGoogleSignIn}
-                className="w-full py-2.5 px-4 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-slate-300 hover:text-white text-xs font-semibold flex items-center justify-center gap-2 transition-all"
+                className="w-full py-2.5 px-4 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 hover:text-slate-900 text-xs font-semibold flex items-center justify-center gap-2 transition-all shadow-sm"
               >
                 <span>⚡ Instant 1-Click Demo Sign Up</span>
               </button>
 
               <div className="relative flex py-2 items-center">
-                <div className="flex-grow border-t border-slate-800"></div>
-                <span className="flex-shrink mx-4 text-[11px] uppercase font-bold text-slate-500 tracking-wider">or email OTP</span>
-                <div className="flex-grow border-t border-slate-800"></div>
+                <div className="flex-grow border-t border-slate-200"></div>
+                <span className="flex-shrink mx-4 text-[11px] uppercase font-bold text-slate-400 tracking-wider">or email OTP</span>
+                <div className="flex-grow border-t border-slate-200"></div>
               </div>
 
               {/* Email Verification Form */}
               <form onSubmit={handleSendOtp} className="space-y-3">
                 <div>
-                  <label className="text-xs text-slate-300 font-semibold block mb-1">College or Personal Email</label>
+                  <label className="text-xs text-slate-700 font-semibold block mb-1">College or Personal Email</label>
                   <div className="relative">
                     <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                     <input
@@ -270,19 +270,19 @@ export default function AuthModal() {
                       placeholder="student@university.ac.in"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-500"
+                      className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-slate-300 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 shadow-sm"
                     />
                   </div>
                 </div>
 
                 {errorMsg && (
-                  <p className="text-xs text-rose-400 font-medium">{errorMsg}</p>
+                  <p className="text-xs text-rose-600 font-medium">{errorMsg}</p>
                 )}
 
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs sm:text-sm transition-all shadow-md shadow-purple-900/30 flex items-center justify-center gap-2 disabled:opacity-50"
+                  className="w-full py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-sky-600 hover:from-indigo-500 hover:to-sky-500 text-white font-bold text-xs sm:text-sm transition-all shadow-md shadow-indigo-100 flex items-center justify-center gap-2 disabled:opacity-50"
                 >
                   {loading ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
@@ -296,7 +296,7 @@ export default function AuthModal() {
               </form>
             </div>
 
-            <div className="text-center pt-2 border-t border-slate-800/80">
+            <div className="text-center pt-2 border-t border-slate-100">
               <p className="text-[11px] text-slate-400">
                 Data is securely stored in your connected Neon PostgreSQL database.
               </p>
@@ -308,23 +308,23 @@ export default function AuthModal() {
         {authMethod === 'email_otp' && (
           <div className="space-y-6">
             <div className="text-center">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-sky-500 to-indigo-500 p-[1px] mx-auto shadow-lg shadow-sky-950/40">
-                <div className="w-full h-full bg-[#131b2e] rounded-[15px] flex items-center justify-center">
-                  <KeyRound className="w-6 h-6 text-sky-400" />
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-600 to-sky-500 p-[1px] mx-auto shadow-md shadow-indigo-100">
+                <div className="w-full h-full bg-white rounded-[15px] flex items-center justify-center">
+                  <KeyRound className="w-6 h-6 text-indigo-600" />
                 </div>
               </div>
-              <h2 className="text-xl font-extrabold text-white mt-3 font-display">
+              <h2 className="text-xl font-extrabold text-slate-900 mt-3 font-display">
                 Enter Verification Code
               </h2>
-              <p className="text-xs text-slate-300 mt-1">
-                We sent a 6-digit verification code to <strong className="text-sky-300">{email}</strong>.
+              <p className="text-xs text-slate-500 mt-1">
+                We sent a 6-digit verification code to <strong className="text-indigo-600">{email}</strong>.
               </p>
             </div>
 
             <form onSubmit={handleVerifyOtp} className="space-y-5">
               {/* 6-Box PIN Inputs */}
               <div>
-                <label className="text-xs text-slate-300 font-semibold block mb-2 text-center">
+                <label className="text-xs text-slate-700 font-semibold block mb-2 text-center">
                   Enter 6-Digit Code
                 </label>
                 <div className="flex justify-center items-center gap-2">
@@ -363,20 +363,20 @@ export default function AuthModal() {
                           document.getElementById(`otp-box-${targetIdx}`)?.focus();
                         }
                       }}
-                      className="w-11 h-12 sm:w-12 sm:h-14 text-center text-xl sm:text-2xl font-bold font-mono text-white bg-slate-900/90 border border-slate-700 rounded-xl focus:outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-500/20 transition-all shadow-inner"
+                      className="w-11 h-12 sm:w-12 sm:h-14 text-center text-xl sm:text-2xl font-bold font-mono text-slate-900 bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100 transition-all shadow-inner"
                     />
                   ))}
                 </div>
               </div>
 
               {errorMsg && (
-                <p className="text-xs text-rose-400 font-medium text-center">{errorMsg}</p>
+                <p className="text-xs text-rose-600 font-medium text-center">{errorMsg}</p>
               )}
 
               <button
                 type="submit"
                 disabled={loading || otp.replace(/\s/g, '').length < 6}
-                className="w-full py-3 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-bold text-sm transition-all shadow-lg shadow-sky-950/40 flex items-center justify-center gap-2 disabled:opacity-50"
+                className="w-full py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-sky-600 hover:from-indigo-500 hover:to-sky-500 text-white font-bold text-sm transition-all shadow-lg shadow-indigo-100 flex items-center justify-center gap-2 disabled:opacity-50"
               >
                 {loading ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
@@ -388,21 +388,21 @@ export default function AuthModal() {
                 )}
               </button>
 
-              <div className="flex items-center justify-between text-xs text-slate-400 pt-1">
+              <div className="flex items-center justify-between text-xs text-slate-500 pt-1">
                 <button
                   type="button"
                   onClick={() => {
                     setErrorMsg('');
                     setAuthMethod('options');
                   }}
-                  className="hover:text-white"
+                  className="hover:text-slate-900"
                 >
                   ← Change Email
                 </button>
                 <button
                   type="button"
                   onClick={handleSendOtp}
-                  className="text-sky-400 hover:underline"
+                  className="text-indigo-600 font-semibold hover:underline"
                 >
                   Resend Code
                 </button>
@@ -415,147 +415,138 @@ export default function AuthModal() {
         {authMethod === 'onboarding' && (
           <div className="space-y-6">
             <div className="text-center">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-500 to-cyan-500 p-[1px] mx-auto">
-                <div className="w-full h-full bg-[#0d1222] rounded-[15px] flex items-center justify-center text-emerald-400">
-                  <GraduationCap className="w-6 h-6" />
-                </div>
+              <div className="w-12 h-12 rounded-2xl bg-indigo-50 border border-indigo-200 flex items-center justify-center mx-auto text-indigo-600">
+                <User className="w-6 h-6" />
               </div>
-              <h2 className="text-xl font-extrabold text-white mt-3 font-display">
-                Create Your Student Profile
+              <h2 className="text-xl font-extrabold text-slate-900 mt-3 font-display">
+                Complete Student Profile
               </h2>
-              <p className="text-xs text-slate-300 mt-1">
-                Tell us about your college & skills so AI can tailor your opportunities
+              <p className="text-xs text-slate-500 mt-1">
+                Calibrate AI opportunity matching engine for your target career & skills
               </p>
             </div>
 
-            <form onSubmit={handleFinishOnboarding} className="space-y-4 text-left">
-              {/* Full Name */}
-              <div>
-                <label className="text-xs text-slate-300 font-semibold block mb-1">Full Name</label>
-                <div className="relative">
-                  <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <form onSubmit={handleFinishOnboarding} className="space-y-4">
+              
+              {/* Full Name & College */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="text-xs text-slate-700 font-semibold block mb-1">Full Name</label>
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Visagan A C"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-500"
+                    placeholder="e.g. Visagan A C"
+                    className="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-300 text-xs text-slate-900 focus:outline-none focus:border-indigo-500 shadow-sm"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs text-slate-700 font-semibold block mb-1">College / University</label>
+                  <input
+                    type="text"
+                    required
+                    value={college}
+                    onChange={(e) => setCollege(e.target.value)}
+                    placeholder="e.g. National Institute of Tech"
+                    className="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-300 text-xs text-slate-900 focus:outline-none focus:border-indigo-500 shadow-sm"
                   />
                 </div>
               </div>
 
-              {/* College & Department */}
+              {/* Department & Year */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="text-xs text-slate-300 font-semibold block mb-1">College Name</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g. NIT / IIT / Anna Univ"
-                    value={college}
-                    onChange={(e) => setCollege(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-500"
-                  />
+                  <label className="text-xs text-slate-700 font-semibold block mb-1">Department / Branch</label>
+                  <select
+                    value={department}
+                    onChange={(e) => setDepartment(e.target.value)}
+                    className="w-full px-3 py-2 rounded-xl bg-white border border-slate-300 text-xs text-slate-700 focus:outline-none focus:border-indigo-500 shadow-sm"
+                  >
+                    <option value="Computer Science & Engineering">Computer Science & Engineering</option>
+                    <option value="Information Technology">Information Technology</option>
+                    <option value="AI & Data Science">AI & Data Science</option>
+                    <option value="Electronics & Communication">Electronics & Communication</option>
+                    <option value="Electrical Engineering">Electrical Engineering</option>
+                    <option value="Mechanical Engineering">Mechanical Engineering</option>
+                    <option value="Biotechnology">Biotechnology</option>
+                    <option value="Business Administration / MBA">Business Administration / MBA</option>
+                  </select>
                 </div>
-
                 <div>
-                  <label className="text-xs text-slate-300 font-semibold block mb-1">Year of Study</label>
+                  <label className="text-xs text-slate-700 font-semibold block mb-1">Year of Study</label>
                   <select
                     value={yearOfStudy}
-                    onChange={(e) => setYearOfStudy(parseInt(e.target.value))}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs sm:text-sm text-white focus:outline-none focus:border-purple-500"
+                    onChange={(e) => setYearOfStudy(Number(e.target.value))}
+                    className="w-full px-3 py-2 rounded-xl bg-white border border-slate-300 text-xs text-slate-700 focus:outline-none focus:border-indigo-500 shadow-sm"
                   >
-                    <option value={1}>1st Year</option>
-                    <option value={2}>2nd Year</option>
-                    <option value={3}>3rd Year</option>
-                    <option value={4}>4th Year</option>
-                    <option value={5}>Postgraduate / Masters</option>
+                    <option value={1}>1st Year (Freshman)</option>
+                    <option value={2}>2nd Year (Sophomore)</option>
+                    <option value={3}>3rd Year (Pre-Final)</option>
+                    <option value={4}>4th Year (Final Year / Graduating)</option>
                   </select>
                 </div>
               </div>
 
-              {/* Department */}
-              <div>
-                <label className="text-xs text-slate-300 font-semibold block mb-1">Department / Branch</label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. Computer Science, AI & Data Science, ECE"
-                  value={department}
-                  onChange={(e) => setDepartment(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-500"
-                />
-              </div>
-
               {/* Target Career Goal */}
               <div>
-                <label className="text-xs text-slate-300 font-semibold block mb-1">Target Career Role / Goal</label>
+                <label className="text-xs text-slate-700 font-semibold block mb-1">Target Dream Role / Career Goal</label>
                 <div className="relative">
-                  <Target className="w-4 h-4 text-purple-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <Target className="w-4 h-4 text-indigo-600 absolute left-3 top-1/2 -translate-y-1/2" />
                   <input
                     type="text"
                     required
-                    placeholder="e.g. AI/ML Engineer, Full Stack Architect"
                     value={careerGoal}
                     onChange={(e) => setCareerGoal(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-500"
+                    placeholder="e.g. AI/ML Research Engineer, Full Stack Architect"
+                    className="w-full pl-9 pr-3.5 py-2 rounded-xl bg-white border border-slate-300 text-xs text-slate-900 focus:outline-none focus:border-indigo-500 shadow-sm"
                   />
                 </div>
               </div>
 
               {/* Skills Tags Manager */}
               <div>
-                <label className="text-xs text-slate-300 font-semibold block mb-1">Your Technical Skills</label>
-                <div className="flex gap-2 mb-2">
-                  <input
-                    type="text"
-                    placeholder="Add a skill (e.g. Python, PyTorch, Next.js)"
-                    value={newSkillName}
-                    onChange={(e) => setNewSkillName(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') {
-                        e.preventDefault();
-                        handleAddSkill();
-                      }
-                    }}
-                    className="flex-1 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
-                  />
-                  <button
-                    type="button"
-                    onClick={handleAddSkill}
-                    className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-400 text-xs font-semibold flex items-center gap-1"
-                  >
-                    <Plus className="w-3.5 h-3.5" />
-                    <span>Add</span>
-                  </button>
-                </div>
-
-                <div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto p-1 bg-slate-950/60 rounded-xl border border-slate-800">
+                <label className="text-xs text-slate-700 font-semibold block mb-1">Your Technical Skills & Strengths</label>
+                <div className="flex flex-wrap gap-1.5 mb-2">
                   {skills.map((s, idx) => (
-                    <span
-                      key={idx}
-                      className="inline-flex items-center gap-1.5 text-[11px] px-2.5 py-1 rounded-lg bg-purple-500/15 border border-purple-500/30 text-purple-300"
-                    >
+                    <span key={idx} className="flex items-center gap-1 text-xs px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 border border-indigo-200 font-semibold">
                       <span>{s.name} ({s.level})</span>
                       <button
                         type="button"
                         onClick={() => handleRemoveSkill(idx)}
-                        className="text-slate-400 hover:text-rose-400"
+                        className="text-slate-400 hover:text-rose-600 ml-1"
                       >
                         <X className="w-3 h-3" />
                       </button>
                     </span>
                   ))}
                 </div>
+
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    placeholder="Add skill (e.g. PyTorch, Docker, Solidity)"
+                    value={newSkillName}
+                    onChange={(e) => setNewSkillName(e.target.value)}
+                    className="flex-1 px-3 py-1.5 rounded-xl bg-white border border-slate-300 text-xs text-slate-900 focus:outline-none focus:border-indigo-500 shadow-sm"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleAddSkill}
+                    className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold border border-slate-200 transition-colors flex items-center gap-1"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    <span>Add</span>
+                  </button>
+                </div>
               </div>
 
               <button
                 type="submit"
-                className="w-full py-3 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-500 hover:opacity-95 text-white font-bold text-sm transition-all shadow-lg shadow-purple-900/40 flex items-center justify-center gap-2 mt-2"
+                className="w-full py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-sky-600 hover:from-indigo-500 hover:to-sky-500 text-white font-bold text-xs sm:text-sm transition-all shadow-md shadow-indigo-100 flex items-center justify-center gap-2 mt-4"
               >
-                <span>Save Profile & Launch Feed</span>
-                <Sparkles className="w-4 h-4" />
+                <span>Save Profile & Start Exploring</span>
+                <CheckCircle2 className="w-4 h-4" />
               </button>
             </form>
           </div>

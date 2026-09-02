@@ -66,48 +66,48 @@ export default function EventDetailModal({ event, student, matchScore, onClose, 
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-full max-w-3xl max-h-[92vh] overflow-y-auto rounded-3xl glass-panel border border-slate-700/80 p-6 sm:p-8 shadow-2xl shadow-black">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="relative w-full max-w-3xl max-h-[92vh] overflow-y-auto rounded-3xl bg-white border border-slate-200 p-6 sm:p-8 shadow-2xl shadow-slate-900/20 text-slate-900">
         
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 p-2 rounded-xl bg-slate-800/80 text-slate-400 hover:text-white hover:bg-slate-700 transition-colors z-10"
+          className="absolute top-5 right-5 p-2 rounded-xl bg-slate-100 text-slate-500 hover:text-slate-900 hover:bg-slate-200 transition-colors z-10"
         >
           <X className="w-5 h-5" />
         </button>
 
         {/* Top Badges */}
         <div className="flex flex-wrap items-center gap-2 pr-10">
-          <span className="px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/15 border border-purple-500/30 text-purple-300">
+          <span className="px-3 py-1 rounded-full text-xs font-bold bg-indigo-50 border border-indigo-200 text-indigo-700">
             {event.category}
           </span>
-          <span className="px-3 py-1 rounded-full text-xs font-semibold bg-slate-800 border border-slate-700 text-slate-300">
+          <span className="px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 border border-slate-200 text-slate-700">
             {event.type}
           </span>
-          <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-            event.mode === 'Offline' ? 'bg-amber-500/15 border border-amber-500/30 text-amber-300' :
-            event.mode === 'Virtual' ? 'bg-cyan-500/15 border border-cyan-500/30 text-cyan-300' :
-            'bg-emerald-500/15 border border-emerald-500/30 text-emerald-300'
+          <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${
+            event.mode === 'Offline' ? 'bg-amber-50 border-amber-200 text-amber-700' :
+            event.mode === 'Virtual' ? 'bg-sky-50 border-sky-200 text-sky-700' :
+            'bg-emerald-50 border-emerald-200 text-emerald-700'
           }`}>
             {event.mode} Mode
           </span>
-          <span className="px-3 py-1 rounded-full text-xs font-semibold bg-slate-800 border border-slate-700 text-slate-400">
+          <span className="px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 border border-slate-200 text-slate-600">
             Difficulty: {event.difficulty}
           </span>
         </div>
 
         {/* Title & Organizer */}
         <div className="mt-4">
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white font-display leading-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 font-display leading-tight">
             {event.title}
           </h1>
-          <div className="flex items-center gap-2 mt-2 text-sm text-slate-300">
+          <div className="flex items-center gap-2 mt-2 text-sm text-slate-600">
             <span className="text-lg">{event.organizer.logoUrl || '🏛️'}</span>
-            <span className="font-semibold">{event.organizer.name}</span>
+            <span className="font-bold text-slate-800">{event.organizer.name}</span>
             {event.organizer.verified && (
-              <span className="flex items-center gap-1 text-xs text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded-md border border-cyan-500/20 font-medium">
-                <ShieldCheck className="w-3 h-3" /> Verified Organizer
+              <span className="flex items-center gap-1 text-xs text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-200 font-semibold">
+                <ShieldCheck className="w-3 h-3 text-indigo-600" /> Verified Organizer
               </span>
             )}
             <span className="text-slate-400">• {event.organizer.college}</span>
@@ -115,63 +115,63 @@ export default function EventDetailModal({ event, student, matchScore, onClose, 
         </div>
 
         {/* Quick Highlights Grid */}
-        <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3 p-4 rounded-2xl bg-slate-900/90 border border-slate-800 text-center">
+        <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3 p-4 rounded-2xl bg-slate-50 border border-slate-200 text-center">
           <div className="p-2">
-            <div className="text-[11px] text-slate-400 flex items-center justify-center gap-1">
-              <Calendar className="w-3.5 h-3.5 text-cyan-400" /> Start Date
+            <div className="text-[11px] text-slate-500 flex items-center justify-center gap-1 font-semibold">
+              <Calendar className="w-3.5 h-3.5 text-indigo-600" /> Start Date
             </div>
-            <div className="text-xs sm:text-sm font-bold text-white mt-1">{event.startDate}</div>
+            <div className="text-xs sm:text-sm font-bold text-slate-900 mt-1">{event.startDate}</div>
           </div>
-          <div className="p-2 border-l border-slate-800">
-            <div className="text-[11px] text-slate-400 flex items-center justify-center gap-1">
-              <Clock className="w-3.5 h-3.5 text-purple-400" /> Duration
+          <div className="p-2 border-l border-slate-200">
+            <div className="text-[11px] text-slate-500 flex items-center justify-center gap-1 font-semibold">
+              <Clock className="w-3.5 h-3.5 text-indigo-600" /> Duration
             </div>
-            <div className="text-xs sm:text-sm font-bold text-white mt-1">{event.duration || '36 Hours'}</div>
+            <div className="text-xs sm:text-sm font-bold text-slate-900 mt-1">{event.duration || '36 Hours'}</div>
           </div>
-          <div className="p-2 border-l border-slate-800">
-            <div className="text-[11px] text-slate-400 flex items-center justify-center gap-1">
-              <Trophy className="w-3.5 h-3.5 text-amber-400" /> Prize Pool
+          <div className="p-2 border-l border-slate-200">
+            <div className="text-[11px] text-slate-500 flex items-center justify-center gap-1 font-semibold">
+              <Trophy className="w-3.5 h-3.5 text-amber-500" /> Prize Pool
             </div>
-            <div className="text-xs sm:text-sm font-bold text-amber-300 mt-1 truncate">{event.prizePool || '₹5,00,000'}</div>
+            <div className="text-xs sm:text-sm font-bold text-amber-700 mt-1 truncate">{event.prizePool || '₹5,00,000'}</div>
           </div>
-          <div className="p-2 border-l border-slate-800">
-            <div className="text-[11px] text-slate-400 flex items-center justify-center gap-1">
-              <MapPin className="w-3.5 h-3.5 text-rose-400" /> Location
+          <div className="p-2 border-l border-slate-200">
+            <div className="text-[11px] text-slate-500 flex items-center justify-center gap-1 font-semibold">
+              <MapPin className="w-3.5 h-3.5 text-rose-500" /> Location
             </div>
-            <div className="text-xs sm:text-sm font-bold text-white mt-1 truncate">{event.location}</div>
+            <div className="text-xs sm:text-sm font-bold text-slate-900 mt-1 truncate">{event.location}</div>
           </div>
         </div>
 
         {/* Description */}
         <div className="mt-6 space-y-2">
-          <h3 className="text-sm font-bold text-slate-200 uppercase tracking-wider">About this Opportunity</h3>
-          <p className="text-sm text-slate-300 leading-relaxed">
+          <h3 className="text-xs font-bold text-slate-700 uppercase tracking-wider">About this Opportunity</h3>
+          <p className="text-sm text-slate-600 leading-relaxed">
             {event.description}
           </p>
         </div>
 
         {/* Requirements & Skills Matrix */}
         <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800/80">
-            <h4 className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-              <Award className="w-4 h-4 text-cyan-400" /> Prerequisites & Tech Stack
+          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+            <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+              <Award className="w-4 h-4 text-indigo-600" /> Prerequisites & Tech Stack
             </h4>
             <div className="flex flex-wrap gap-1.5">
               {(event.requiredSkills || []).map((skill, idx) => (
-                <span key={idx} className="text-xs px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-200">
+                <span key={idx} className="text-xs px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-slate-700 font-medium shadow-sm">
                   {skill}
                 </span>
               ))}
             </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800/80">
-            <h4 className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-              <Sparkles className="w-4 h-4 text-purple-400" /> Skills You Gain
+          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+            <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+              <Sparkles className="w-4 h-4 text-indigo-600" /> Skills You Gain
             </h4>
             <div className="flex flex-wrap gap-1.5">
               {(event.skillsGained || []).map((skill, idx) => (
-                <span key={idx} className="text-xs px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-300">
+                <span key={idx} className="text-xs px-2.5 py-1 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 font-semibold shadow-sm">
                   + {skill}
                 </span>
               ))}
@@ -182,11 +182,11 @@ export default function EventDetailModal({ event, student, matchScore, onClose, 
         {/* Perks & Benefits */}
         {event.perks && event.perks.length > 0 && (
           <div className="mt-6">
-            <h3 className="text-sm font-bold text-slate-200 uppercase tracking-wider mb-2">Participant Perks & Benefits</h3>
+            <h3 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Participant Perks & Benefits</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {event.perks.map((perk, idx) => (
-                <div key={idx} className="flex items-center gap-2 p-2.5 rounded-xl bg-slate-900/60 border border-slate-800 text-xs text-slate-300">
-                  <CheckCircle className="w-4 h-4 text-cyan-400 flex-shrink-0" />
+                <div key={idx} className="flex items-center gap-2 p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-700 font-medium">
+                  <CheckCircle className="w-4 h-4 text-emerald-600 flex-shrink-0" />
                   <span>{perk}</span>
                 </div>
               ))}
@@ -197,11 +197,11 @@ export default function EventDetailModal({ event, student, matchScore, onClose, 
         {/* Eligibility Criteria */}
         {event.eligibility && event.eligibility.length > 0 && (
           <div className="mt-6">
-            <h3 className="text-sm font-bold text-slate-200 uppercase tracking-wider mb-2">Eligibility Criteria</h3>
-            <ul className="space-y-1.5 text-xs text-slate-300">
+            <h3 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Eligibility Criteria</h3>
+            <ul className="space-y-1.5 text-xs text-slate-600 font-medium">
               {event.eligibility.map((el, idx) => (
                 <li key={idx} className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-purple-400 flex-shrink-0" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 flex-shrink-0" />
                   <span>{el}</span>
                 </li>
               ))}
@@ -212,13 +212,13 @@ export default function EventDetailModal({ event, student, matchScore, onClose, 
         {/* Mentors / Speakers */}
         {event.mentors && event.mentors.length > 0 && (
           <div className="mt-6">
-            <h3 className="text-sm font-bold text-slate-200 uppercase tracking-wider mb-3">Industry Mentors & Judges</h3>
+            <h3 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3">Industry Mentors & Judges</h3>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {event.mentors.map((mentor, idx) => (
-                <div key={idx} className="p-3 rounded-2xl bg-slate-900/80 border border-slate-800 text-xs">
-                  <div className="font-bold text-white">{mentor.name}</div>
-                  <div className="text-purple-300 text-[11px]">{mentor.role}</div>
-                  <div className="text-slate-400 text-[10px]">{mentor.company}</div>
+                <div key={idx} className="p-3 rounded-2xl bg-slate-50 border border-slate-200 text-xs">
+                  <div className="font-bold text-slate-900">{mentor.name}</div>
+                  <div className="text-indigo-600 font-semibold text-[11px]">{mentor.role}</div>
+                  <div className="text-slate-500 text-[10px]">{mentor.company}</div>
                 </div>
               ))}
             </div>
@@ -227,13 +227,13 @@ export default function EventDetailModal({ event, student, matchScore, onClose, 
 
         {/* Registration Success Banner */}
         {registrationSuccess && (
-          <div className="mt-6 p-4 rounded-2xl bg-emerald-950/60 border border-emerald-500/40 animate-in zoom-in-95 duration-200">
+          <div className="mt-6 p-4 rounded-2xl bg-emerald-50 border border-emerald-200 animate-in zoom-in-95 duration-200 shadow-sm">
             <div className="flex items-center gap-3">
-              <CheckCircle className="w-6 h-6 text-emerald-400 flex-shrink-0" />
+              <CheckCircle className="w-6 h-6 text-emerald-600 flex-shrink-0" />
               <div>
-                <h4 className="text-sm font-bold text-white">Registration Confirmed for {user?.name || student?.name || 'Student Innovator'}!</h4>
-                <p className="text-xs text-emerald-300 mt-0.5">
-                  Your entry pass ID: <strong className="font-mono text-white">{ticketId}</strong>. Synchronized with your active student profile in Neon PostgreSQL.
+                <h4 className="text-sm font-bold text-slate-900">Registration Confirmed for {user?.name || student?.name || 'Student Innovator'}!</h4>
+                <p className="text-xs text-emerald-700 mt-0.5">
+                  Your entry pass ID: <strong className="font-mono text-slate-900">{ticketId}</strong>. Synchronized with your active student profile.
                 </p>
               </div>
             </div>
@@ -241,55 +241,44 @@ export default function EventDetailModal({ event, student, matchScore, onClose, 
         )}
 
         {/* Action Buttons Footer */}
-        <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-slate-800">
+        <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-slate-200">
           <div className="flex items-center gap-2 w-full sm:w-auto">
             <button
               onClick={handleBookmark}
-              className={`flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border text-xs font-semibold transition-all ${
+              className={`flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border text-xs font-bold transition-all ${
                 isBookmarked
-                  ? 'bg-purple-600/20 border-purple-500/50 text-purple-300'
-                  : 'bg-slate-800 hover:bg-slate-700 border-slate-700 text-slate-300'
+                  ? 'bg-indigo-50 border-indigo-300 text-indigo-700'
+                  : 'bg-slate-100 border-slate-200 text-slate-700 hover:bg-slate-200'
               }`}
             >
-              <Bookmark className={`w-4 h-4 ${isBookmarked ? 'fill-purple-400 text-purple-400' : ''}`} />
-              <span>{isBookmarked ? 'Saved to Bookmarks' : 'Bookmark Event'}</span>
+              <Bookmark className={`w-4 h-4 ${isBookmarked ? 'fill-indigo-600 text-indigo-600' : ''}`} />
+              <span>{isBookmarked ? 'Saved to Profile' : 'Save Event'}</span>
+            </button>
+
+            <button
+              onClick={onOpenExplainer}
+              className="flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-800 text-xs font-bold transition-colors"
+            >
+              <Sparkles className="w-4 h-4 text-indigo-600" />
+              <span>Why Matched ({matchScore || 95}%)</span>
             </button>
           </div>
 
-          <div className="flex items-center gap-3 w-full sm:w-auto">
-            <button
-              onClick={onClose}
-              className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition-colors"
-            >
-              Back to Feed
-            </button>
-
-            <button
-              onClick={handleRegister}
-              disabled={isRegistered || registrationSuccess}
-              className={`flex-1 sm:flex-initial flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold transition-all shadow-lg ${
-                isRegistered || registrationSuccess
-                  ? 'bg-emerald-600/30 border border-emerald-500/40 text-emerald-300 cursor-default'
-                  : 'bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-500 hover:opacity-95 text-white shadow-purple-900/40'
-              }`}
-            >
-              {isRegistered || registrationSuccess ? (
-                <>
-                  <CheckCircle className="w-4 h-4" />
-                  <span>Pass Issued & Registered</span>
-                </>
-              ) : !isAuthenticated || !user ? (
-                <>
-                  <LogIn className="w-4 h-4" />
-                  <span>Sign In to Register Free</span>
-                </>
-              ) : (
-                <>
-                  <Sparkles className="w-4 h-4" />
-                  <span>Register Free with 1-Click</span>
-                </>
-              )}
-            </button>
+          <div className="w-full sm:w-auto flex items-center gap-3">
+            {isRegistered ? (
+              <div className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 font-bold text-xs">
+                <CheckCircle className="w-4 h-4 text-emerald-600" />
+                <span>Pass Claimed ({ticketId || 'Active'})</span>
+              </div>
+            ) : (
+              <button
+                onClick={handleRegister}
+                className="w-full sm:w-auto px-7 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-sky-600 hover:from-indigo-500 hover:to-sky-500 text-white font-bold text-xs shadow-lg shadow-indigo-100 transition-all flex items-center justify-center gap-2"
+              >
+                <span>Claim 1-Click Entry Pass</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </button>
+            )}
           </div>
         </div>
 

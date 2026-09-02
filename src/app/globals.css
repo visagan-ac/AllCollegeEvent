@@ -5,23 +5,23 @@
 @tailwind utilities;
 
 :root {
-  --background: #141b2d;
-  --foreground: #f8fafc;
+  --background: #f8fafc;
+  --foreground: #0f172a;
   --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
   --font-display: 'Outfit', system-ui, sans-serif;
   --font-mono: 'Space Grotesk', monospace;
 }
 
 body {
-  background-color: #141b2d;
-  color: #f1f5f9;
+  background-color: #f8fafc;
+  color: #0f172a;
   font-family: var(--font-sans);
   overflow-x: hidden;
   background-image: 
-    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(99, 102, 241, 0.12), transparent),
-    radial-gradient(circle at 10% 25%, rgba(56, 189, 248, 0.08), transparent 45%),
-    radial-gradient(circle at 90% 65%, rgba(167, 139, 250, 0.08), transparent 50%),
-    radial-gradient(circle at 50% 100%, rgba(52, 211, 153, 0.06), transparent 50%);
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(99, 102, 241, 0.07), transparent),
+    radial-gradient(circle at 10% 25%, rgba(56, 189, 248, 0.05), transparent 45%),
+    radial-gradient(circle at 90% 65%, rgba(167, 139, 250, 0.05), transparent 50%),
+    radial-gradient(circle at 50% 100%, rgba(52, 211, 153, 0.04), transparent 50%);
   background-attachment: fixed;
   min-height: 100vh;
 }
@@ -35,13 +35,11 @@ body {
   font-family: var(--font-mono);
 }
 
-/* Calming Soft-Slate Glassmorphic Panels */
+/* Clean High-Contrast Cards & Glass Panels */
 .glass-panel {
-  background: rgba(26, 35, 58, 0.75);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 12px 36px -10px rgba(0, 0, 0, 0.35);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
 }
 
 .glass-panel-hover {
@@ -49,21 +47,21 @@ body {
 }
 
 .glass-panel-hover:hover {
-  background: rgba(32, 44, 73, 0.9);
-  border-color: rgba(129, 140, 248, 0.4);
-  box-shadow: 0 16px 40px -10px rgba(15, 23, 42, 0.5);
+  background: #ffffff;
+  border-color: #818cf8;
+  box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.1), 0 8px 10px -6px rgba(15, 23, 42, 0.08);
   transform: translateY(-2px);
 }
 
-/* Mild Stylish Gradient Typography */
+/* Gradient Typography for Light Mode */
 .gradient-text-brand {
-  background: linear-gradient(135deg, #ffffff 0%, #c7d2fe 50%, #93c5fd 100%);
+  background: linear-gradient(135deg, #0f172a 0%, #4338ca 50%, #0284c7 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .gradient-text-calm {
-  background: linear-gradient(135deg, #e0e7ff 0%, #a5b4fc 50%, #6ee7b7 100%);
+  background: linear-gradient(135deg, #1e1b4b 0%, #4f46e5 50%, #059669 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -75,14 +73,14 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #141b2d;
+  background: #f1f5f9;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #2a3756;
+  background: #cbd5e1;
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #3b4d75;
+  background: #94a3b8;
 }

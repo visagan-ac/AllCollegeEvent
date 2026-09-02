@@ -29,28 +29,28 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="border-b border-slate-700/60 bg-[#141b2d]/90 backdrop-blur-xl sticky top-0 z-50">
+      <nav className="border-b border-slate-200/80 bg-white/95 backdrop-blur-xl sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 sm:h-20">
             
             {/* Logo */}
             <div className="flex items-center gap-3">
               <Link href="/" className="flex items-center gap-2.5 group">
-                <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-500 via-sky-400 to-emerald-400 p-[1px] shadow-sm transition-all duration-300">
-                  <div className="w-full h-full bg-[#182238] rounded-[11px] flex items-center justify-center">
-                    <Sparkles className="w-4 h-4 text-sky-400 group-hover:scale-105 transition-transform" />
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-sky-500 p-[1px] shadow-sm transition-all duration-300">
+                  <div className="w-full h-full bg-white rounded-[11px] flex items-center justify-center">
+                    <Sparkles className="w-4 h-4 text-indigo-600 group-hover:scale-105 transition-transform" />
                   </div>
                 </div>
                 <div className="flex flex-col">
                   <div className="flex items-center gap-1.5">
-                    <span className="font-extrabold text-lg sm:text-xl tracking-tight text-white font-display">
-                      AllCollegeEvent<span className="text-sky-400">.ai</span>
+                    <span className="font-extrabold text-lg sm:text-xl tracking-tight text-slate-900 font-display">
+                      AllCollegeEvent<span className="text-indigo-600">.ai</span>
                     </span>
-                    <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-indigo-500/20 border border-indigo-400/30 text-indigo-200">
+                    <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-indigo-50 border border-indigo-200 text-indigo-700">
                       v2.1
                     </span>
                   </div>
-                  <span className="text-[11px] text-slate-400 hidden sm:inline-block">Collegiate Opportunity Intelligence</span>
+                  <span className="text-[11px] text-slate-500 hidden sm:inline-block">Collegiate Opportunity Intelligence</span>
                 </div>
               </Link>
             </div>
@@ -59,9 +59,9 @@ export default function Navbar() {
             <div className="hidden md:flex items-center space-x-2">
               <Link
                 href="/"
-                className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-800/90 text-slate-200 border border-slate-700 hover:bg-slate-700 transition-colors shadow-sm"
+                className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-800 border border-slate-200 hover:bg-slate-200/80 transition-colors shadow-sm"
               >
-                <Compass className="w-3.5 h-3.5 text-sky-400" />
+                <Compass className="w-3.5 h-3.5 text-indigo-600" />
                 <span>Opportunity Feed</span>
               </Link>
             </div>
@@ -71,11 +71,11 @@ export default function Navbar() {
               
               {/* Quick Stats */}
               <div className="flex items-center gap-2 text-xs">
-                <div className="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-800/80 border border-slate-700 text-slate-300 font-medium">
-                  <Bookmark className="w-3 h-3 text-indigo-400" />
+                <div className="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 border border-slate-200 text-slate-700 font-medium">
+                  <Bookmark className="w-3 h-3 text-indigo-600" />
                   <span>{bookmarkedEventIds.length} Saved</span>
                 </div>
-                <div className="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-800/80 border border-slate-700 text-emerald-300 font-medium">
+                <div className="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-700 font-medium">
                   <CheckCircle2 className="w-3 h-3" />
                   <span>{registeredEventIds.length} Passes</span>
                 </div>
@@ -86,71 +86,70 @@ export default function Navbar() {
                 <div className="relative">
                   <button
                     onClick={() => setUserMenuOpen(!userMenuOpen)}
-                    className="flex items-center gap-2.5 pl-2 pr-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 hover:border-slate-600 transition-all text-left shadow-md group"
+                    className="flex items-center gap-2.5 pl-2 pr-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 hover:border-slate-300 transition-all text-left shadow-sm group"
                   >
                     <img
                       src={user.avatar}
                       alt={user.name}
-                      className="w-7 h-7 rounded-lg object-cover ring-1 ring-slate-600 group-hover:ring-sky-400 transition-all"
+                      className="w-7 h-7 rounded-lg object-cover ring-1 ring-slate-200 group-hover:ring-indigo-500 transition-all"
                     />
                     <div className="hidden sm:flex flex-col">
-                      <span className="text-xs font-bold text-white leading-tight">{user.name}</span>
-                      <span className="text-[10px] text-sky-300 truncate max-w-[110px]">{user.careerGoals[0]}</span>
+                      <span className="text-xs font-bold text-slate-900 leading-tight">{user.name}</span>
+                      <span className="text-[10px] text-indigo-600 truncate max-w-[110px] font-medium">{user.careerGoals[0]}</span>
                     </div>
-                    <ChevronDown className="w-3.5 h-3.5 text-slate-400 group-hover:text-white transition-transform" />
+                    <ChevronDown className="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-700 transition-transform" />
                   </button>
 
+                  {/* Dropdown Menu */}
                   {userMenuOpen && (
-                    <div className="absolute right-0 mt-2 w-64 rounded-2xl glass-panel p-2 shadow-2xl border border-slate-700 z-50 animate-in fade-in duration-150">
-                      <div className="px-3 py-2 border-b border-slate-700">
-                        <div className="text-xs font-bold text-white truncate">{user.name}</div>
-                        <div className="text-[11px] text-slate-400 truncate">{user.email}</div>
-                        <div className="text-[10px] text-indigo-300 mt-1">{user.college}</div>
+                    <div className="absolute right-0 mt-2 w-56 rounded-2xl bg-white border border-slate-200 p-2 shadow-xl z-50 animate-in fade-in zoom-in-95 duration-150">
+                      <div className="p-3 border-b border-slate-100 mb-1 bg-slate-50 rounded-xl">
+                        <p className="text-xs font-bold text-slate-900 truncate">{user.name}</p>
+                        <p className="text-[11px] text-slate-500 truncate">{user.email}</p>
+                        <p className="text-[10px] text-indigo-600 font-semibold mt-1">{user.college}</p>
                       </div>
 
-                      <div className="py-1 space-y-0.5">
-                        <button
-                          onClick={() => {
-                            setUserMenuOpen(false);
-                            setAuthModalOpen(true);
-                          }}
-                          className="flex items-center gap-2 w-full px-3 py-2 text-xs text-slate-200 hover:bg-slate-700/80 rounded-xl transition-colors text-left font-medium"
-                        >
-                          <SlidersHorizontal className="w-3.5 h-3.5 text-sky-400" />
-                          <span>Edit Skills & Goals</span>
-                        </button>
+                      <button
+                        onClick={() => {
+                          setUserMenuOpen(false);
+                          setAuthModalOpen(true);
+                        }}
+                        className="w-full flex items-center gap-2 px-3 py-2 text-xs text-slate-700 hover:bg-slate-100 rounded-lg transition-colors text-left"
+                      >
+                        <SlidersHorizontal className="w-3.5 h-3.5 text-slate-500" />
+                        <span>Edit Preferences</span>
+                      </button>
 
-                        <button
-                          onClick={() => {
-                            setUserMenuOpen(false);
-                            logout();
-                          }}
-                          className="flex items-center gap-2 w-full px-3 py-2 text-xs text-rose-300 hover:bg-rose-500/15 rounded-xl transition-colors text-left font-medium"
-                        >
-                          <LogOut className="w-3.5 h-3.5" />
-                          <span>Sign Out</span>
-                        </button>
-                      </div>
+                      <button
+                        onClick={() => {
+                          setUserMenuOpen(false);
+                          logout();
+                        }}
+                        className="w-full flex items-center gap-2 px-3 py-2 text-xs text-rose-600 hover:bg-rose-50 rounded-lg transition-colors text-left"
+                      >
+                        <LogOut className="w-3.5 h-3.5" />
+                        <span>Sign Out</span>
+                      </button>
                     </div>
                   )}
                 </div>
               ) : (
+                /* If Guest: Sign In Button */
                 <button
                   onClick={() => setAuthModalOpen(true)}
-                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-500 to-sky-500 hover:from-indigo-400 hover:to-sky-400 text-white font-bold text-xs transition-all shadow-md shadow-indigo-950/40"
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-sky-600 hover:from-indigo-500 hover:to-sky-500 text-white font-bold text-xs shadow-md shadow-indigo-200 hover:scale-[1.02] transition-all"
                 >
                   <LogIn className="w-3.5 h-3.5" />
-                  <span>Sign In / Sign Up</span>
+                  <span>Sign In</span>
                 </button>
               )}
-
             </div>
 
           </div>
         </div>
       </nav>
 
-      {/* Global Auth Modal */}
+      {/* Global Auth / Profile Modal */}
       <AuthModal />
     </>
   );

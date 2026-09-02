@@ -183,22 +183,22 @@ export default function HomePage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       
-      {/* Hero Section - Calm Soft-Slate Panel */}
-      <div className="relative rounded-3xl p-8 sm:p-10 glass-panel border border-slate-600/30 overflow-hidden shadow-lg">
-        <div className="absolute top-0 right-0 w-[450px] h-[450px] bg-gradient-to-br from-indigo-500/10 via-sky-400/08 to-teal-400/06 rounded-full blur-3xl -z-10" />
+      {/* Hero Section - High-Contrast White Panel */}
+      <div className="relative rounded-3xl p-8 sm:p-10 bg-white border border-slate-200/90 overflow-hidden shadow-sm">
+        <div className="absolute top-0 right-0 w-[450px] h-[450px] bg-gradient-to-br from-indigo-50/70 via-sky-50/50 to-teal-50/40 rounded-full blur-3xl -z-10" />
         
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
           <div className="max-w-2xl space-y-4">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-800/90 border border-slate-600/50 text-xs font-semibold text-sky-200">
-              <Sparkles className="w-3.5 h-3.5 text-sky-400" />
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-50 border border-indigo-200 text-xs font-semibold text-indigo-700">
+              <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
               <span>Collegiate Opportunity Intelligence • 2,000+ Verified Events</span>
             </div>
 
-            <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight font-display leading-[1.15]">
+            <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight font-display leading-[1.15]">
               AI-Powered <span className="gradient-text-calm">Opportunity Discovery</span>
             </h1>
 
-            <p className="text-sm sm:text-base text-slate-300 font-normal leading-relaxed">
+            <p className="text-sm sm:text-base text-slate-600 font-normal leading-relaxed">
               Explore 2,000+ curated hackathons, workshops, and student summits across 22 major cities — tailored autonomously to your branch, skills, and target career.
             </p>
 
@@ -206,14 +206,14 @@ export default function HomePage() {
             <div className="flex flex-wrap items-center gap-3 pt-2">
               <a
                 href="#discovery-feed"
-                className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-500 to-sky-500 hover:from-indigo-400 hover:to-sky-400 text-white font-bold text-xs sm:text-sm transition-all shadow-md shadow-indigo-950/40 flex items-center gap-2"
+                className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-sky-600 hover:from-indigo-500 hover:to-sky-500 text-white font-bold text-xs sm:text-sm transition-all shadow-md shadow-indigo-200 flex items-center gap-2"
               >
                 <span>Explore 2,000+ Opportunities</span>
                 <ArrowRight className="w-4 h-4" />
               </a>
 
-              <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-800/90 border border-slate-700 text-xs font-medium text-slate-300">
-                <Bot className="w-4 h-4 text-sky-400" />
+              <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700">
+                <Bot className="w-4 h-4 text-indigo-600" />
                 <span>AI Chatbot Active</span>
               </div>
             </div>
@@ -221,51 +221,51 @@ export default function HomePage() {
 
           {/* Platform Metrics Card */}
           <div className="grid grid-cols-2 gap-3 lg:w-80 flex-shrink-0">
-            <div className="p-4 rounded-2xl bg-slate-800/80 border border-slate-700/80 text-center">
-              <div className="text-2xl sm:text-3xl font-extrabold text-white font-display">2,000+</div>
-              <div className="text-xs text-sky-200 mt-1 font-medium">Verified Events</div>
+            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-center">
+              <div className="text-2xl sm:text-3xl font-extrabold text-slate-900 font-display">2,000+</div>
+              <div className="text-xs text-slate-500 mt-1 font-semibold">Verified Events</div>
             </div>
-            <div className="p-4 rounded-2xl bg-slate-800/80 border border-slate-700/80 text-center">
-              <div className="text-2xl sm:text-3xl font-extrabold text-indigo-300 font-display">22+</div>
-              <div className="text-xs text-indigo-200 mt-1 font-medium">Tech Cities</div>
+            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-center">
+              <div className="text-2xl sm:text-3xl font-extrabold text-indigo-600 font-display">22+</div>
+              <div className="text-xs text-slate-500 mt-1 font-semibold">Tech Cities</div>
             </div>
-            <div className="p-4 rounded-2xl bg-slate-800/80 border border-slate-700/80 text-center">
-              <div className="text-2xl sm:text-3xl font-extrabold text-teal-300 font-display">12</div>
-              <div className="text-xs text-teal-200 mt-1 font-medium">Domains</div>
+            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-center">
+              <div className="text-2xl sm:text-3xl font-extrabold text-teal-600 font-display">12</div>
+              <div className="text-xs text-slate-500 mt-1 font-semibold">Domains</div>
             </div>
-            <div className="p-4 rounded-2xl bg-slate-800/80 border border-slate-700/80 text-center">
-              <div className="text-2xl sm:text-3xl font-extrabold text-emerald-300 font-display">98.4%</div>
-              <div className="text-xs text-emerald-200 mt-1 font-medium">Match Accuracy</div>
+            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-center">
+              <div className="text-2xl sm:text-3xl font-extrabold text-emerald-600 font-display">98.4%</div>
+              <div className="text-xs text-slate-500 mt-1 font-semibold">Match Accuracy</div>
             </div>
           </div>
         </div>
       </div>
 
       {/* Active Profile Status / Quick Sign Up Banner */}
-      <div className="p-5 rounded-2xl glass-panel border border-slate-700/60 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
         {user ? (
           <div className="flex items-center gap-3.5">
             <img
               src={user.avatar}
               alt={user.name}
-              className="w-11 h-11 rounded-xl object-cover ring-1 ring-slate-600 shadow-sm"
+              className="w-11 h-11 rounded-xl object-cover ring-1 ring-slate-200 shadow-sm"
             />
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="text-sm font-bold text-white font-display">{user.name}</h3>
-                <span className="px-2 py-0.5 rounded-md bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-[10px] font-bold">
+                <h3 className="text-sm font-bold text-slate-900 font-display">{user.name}</h3>
+                <span className="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold">
                   Profile Active
                 </span>
               </div>
-              <p className="text-xs text-slate-300 mt-0.5">
-                {user.department} • {user.college} • Target: <strong className="text-sky-300">{user.careerGoals[0]}</strong>
+              <p className="text-xs text-slate-600 mt-0.5">
+                {user.department} • {user.college} • Target: <strong className="text-indigo-600">{user.careerGoals[0]}</strong>
               </p>
             </div>
           </div>
         ) : (
           <div>
-            <h3 className="text-sm font-bold text-white font-display">Guest Mode</h3>
-            <p className="text-xs text-slate-300 mt-0.5">
+            <h3 className="text-sm font-bold text-slate-900 font-display">Guest Mode</h3>
+            <p className="text-xs text-slate-600 mt-0.5">
               Sign in with Google or Email to unlock 1-click passes, bookmarks, and customized skill rankings.
             </p>
           </div>
@@ -273,9 +273,9 @@ export default function HomePage() {
 
         <button
           onClick={() => setAuthModalOpen(true)}
-          className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-200 text-xs font-semibold transition-all flex items-center justify-center gap-2 shadow-sm"
+          className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-800 text-xs font-bold transition-all flex items-center justify-center gap-2 shadow-sm"
         >
-          <Sparkles className="w-3.5 h-3.5 text-sky-400" />
+          <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
           <span>{user ? 'Edit Profile & Goals' : 'Sign Up with Google / Email'}</span>
         </button>
       </div>
@@ -284,13 +284,13 @@ export default function HomePage() {
       <div id="discovery-feed" className="space-y-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h2 className="text-xl sm:text-2xl font-black text-white font-display flex items-center gap-2">
+            <h2 className="text-xl sm:text-2xl font-black text-slate-900 font-display flex items-center gap-2">
               <span>Personalized Opportunity Feed</span>
-              <span className="text-xs px-2.5 py-0.5 rounded-md bg-slate-800 text-slate-200 border border-slate-700 font-mono-acc font-semibold">
+              <span className="text-xs px-2.5 py-0.5 rounded-md bg-indigo-50 text-indigo-700 border border-indigo-200 font-mono-acc font-bold">
                 {filteredRecommendations.length} Opportunities
               </span>
             </h2>
-            <p className="text-xs text-slate-400 mt-0.5">
+            <p className="text-xs text-slate-500 mt-0.5">
               Search by skill, city, college, organizer, topic, or role across all 2,000+ opportunities.
             </p>
           </div>
@@ -299,7 +299,7 @@ export default function HomePage() {
           <div className="flex items-center gap-2">
             <form onSubmit={handleSearchSubmit} className="flex items-center gap-2 flex-1 sm:w-96">
               <div className="relative flex-1">
-                <Search className="w-4 h-4 text-sky-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
                   placeholder="Search city, skill, college, hackathon, role..."
@@ -309,14 +309,14 @@ export default function HomePage() {
                     setSearchQuery(e.target.value);
                     setVisibleCount(24);
                   }}
-                  className="w-full pl-9 pr-8 py-2.5 rounded-xl bg-slate-800/90 border border-slate-700 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400 transition-all font-sans"
+                  className="w-full pl-9 pr-8 py-2.5 rounded-xl bg-white border border-slate-300 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all font-sans shadow-sm"
                 />
                 {searchInput && (
                   <button
                     type="button"
                     onClick={handleClearSearch}
                     title="Clear search"
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 rounded-md text-slate-400 hover:text-white hover:bg-slate-700 transition-colors"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 rounded-md text-slate-400 hover:text-slate-700 transition-colors"
                   >
                     <X className="w-3.5 h-3.5" />
                   </button>
@@ -326,7 +326,7 @@ export default function HomePage() {
               {/* Explicit Search Button with Enter Support */}
               <button
                 type="submit"
-                className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-indigo-500 to-sky-500 hover:from-indigo-400 hover:to-sky-400 text-white font-bold text-xs transition-all shadow-md shadow-indigo-950/30 flex items-center gap-1.5 flex-shrink-0"
+                className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-sky-600 hover:from-indigo-500 hover:to-sky-500 text-white font-bold text-xs transition-all shadow-md shadow-indigo-100 flex items-center gap-1.5 flex-shrink-0"
               >
                 <span>Search</span>
                 <CornerDownLeft className="w-3.5 h-3.5 opacity-80" />
@@ -337,7 +337,7 @@ export default function HomePage() {
               value={sortBy}
               onChange={(e: any) => setSortBy(e.target.value)}
               aria-label="Sort opportunities by"
-              className="px-3 py-2.5 rounded-xl bg-slate-800/90 border border-slate-700 text-xs text-slate-300 focus:outline-none focus:border-sky-400 transition-colors font-medium"
+              className="px-3 py-2.5 rounded-xl bg-white border border-slate-300 text-xs text-slate-700 focus:outline-none focus:border-indigo-500 transition-colors font-semibold shadow-sm"
             >
               <option value="match">Sort by AI Match</option>
               <option value="trust">Sort by Trust Score</option>
@@ -347,9 +347,9 @@ export default function HomePage() {
         </div>
 
         {/* Active Search Filter Badge & Quick Search Suggestions Pills */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none text-[11px] text-slate-400">
-          <span className="font-semibold text-slate-400 flex items-center gap-1 flex-shrink-0">
-            <Filter className="w-3 h-3 text-sky-400" /> Popular:
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none text-[11px] text-slate-500">
+          <span className="font-bold text-slate-700 flex items-center gap-1 flex-shrink-0">
+            <Filter className="w-3 h-3 text-indigo-600" /> Popular:
           </span>
           {quickSearchTags.map(tag => (
             <button
@@ -358,8 +358,8 @@ export default function HomePage() {
               onClick={() => handleQuickTagClick(tag)}
               className={`px-2.5 py-0.5 rounded-full border transition-all flex-shrink-0 ${
                 (searchQuery || searchInput).toLowerCase() === tag.toLowerCase()
-                  ? 'bg-sky-500/20 text-sky-200 border-sky-400/50 font-bold'
-                  : 'bg-slate-800/80 text-slate-300 border-slate-700 hover:text-white hover:bg-slate-700'
+                  ? 'bg-indigo-600 text-white border-indigo-600 font-bold shadow-sm'
+                  : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'
               }`}
             >
               {tag}
@@ -369,14 +369,14 @@ export default function HomePage() {
             <button
               type="button"
               onClick={handleClearSearch}
-              className="text-rose-400 hover:underline font-semibold ml-1 flex-shrink-0"
+              className="text-rose-600 hover:underline font-bold ml-1 flex-shrink-0"
             >
               Clear Search ({searchQuery || searchInput})
             </button>
           )}
         </div>
 
-        {/* Stylish Mild Category Filter Pills */}
+        {/* Category Filter Pills */}
         <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
           {categories.map((category) => (
             <button
@@ -387,8 +387,8 @@ export default function HomePage() {
               }}
               className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
                 selectedCategory === category
-                  ? 'bg-gradient-to-r from-indigo-500 to-sky-500 text-white shadow-md border border-indigo-300/40'
-                  : 'bg-slate-800/80 text-slate-300 hover:text-white hover:bg-slate-700 border border-slate-700/80'
+                  ? 'bg-indigo-600 text-white shadow-md border border-indigo-600'
+                  : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 shadow-sm'
               }`}
             >
               {category}
@@ -397,8 +397,8 @@ export default function HomePage() {
         </div>
 
         {/* Mode Filter Pills */}
-        <div className="flex items-center gap-2 text-xs text-slate-400">
-          <span className="font-semibold text-slate-300">Format:</span>
+        <div className="flex items-center gap-2 text-xs text-slate-600">
+          <span className="font-bold text-slate-700">Format:</span>
           {modes.map((mode) => (
             <button
               key={mode}
@@ -406,10 +406,10 @@ export default function HomePage() {
                 setSelectedMode(mode);
                 setVisibleCount(24);
               }}
-              className={`px-3 py-1.5 rounded-lg transition-colors font-medium ${
+              className={`px-3 py-1.5 rounded-lg transition-colors font-medium border ${
                 selectedMode === mode
-                  ? 'bg-sky-500/20 text-sky-200 border border-sky-400/40 font-semibold'
-                  : 'hover:text-slate-200 bg-slate-800/70 border border-slate-700/70 text-slate-400'
+                  ? 'bg-sky-50 text-sky-700 border-sky-300 font-bold'
+                  : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
               }`}
             >
               {mode}
