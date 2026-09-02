@@ -10,16 +10,9 @@ import AIChatbot from '@/components/AIChatbot';
 import { 
   Sparkles, 
   Search, 
-  Trophy, 
   ArrowRight, 
-  MessageSquare, 
-  SlidersHorizontal,
-  Bot,
-  MapPin,
-  ChevronDown,
-  Layers,
-  Flame,
-  Globe2
+  Bot, 
+  ChevronDown
 } from 'lucide-react';
 
 export default function HomePage() {
@@ -95,102 +88,102 @@ export default function HomePage() {
   const paginatedRecommendations = filteredRecommendations.slice(0, visibleCount);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       
       {/* Hero Section */}
-      <div className="relative rounded-3xl p-8 sm:p-12 glass-panel border border-purple-500/30 overflow-hidden shadow-2xl shadow-purple-950/20">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-br from-purple-600/25 via-cyan-500/20 to-emerald-500/10 rounded-full blur-3xl -z-10 animate-pulse-slow" />
+      <div className="relative rounded-3xl p-8 sm:p-10 glass-panel border border-slate-700/60 overflow-hidden">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-600/08 rounded-full blur-3xl -z-10" />
         
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
           <div className="max-w-2xl space-y-4">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-purple-500/25 via-cyan-500/20 to-emerald-500/20 border border-purple-400/40 text-xs font-bold text-purple-200 shadow-md shadow-purple-950/40">
-              <Sparkles className="w-3.5 h-3.5 text-cyan-300 animate-spin" />
-              <span>National Opportunity Intelligence Layer • 2,000+ Verified Live Events</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/25 text-xs font-semibold text-indigo-300">
+              <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
+              <span>National Opportunity Intelligence Layer • 2,000+ Events</span>
             </div>
 
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight font-display leading-[1.12]">
-              AI-Powered <span className="gradient-text-brand">Collegiate Discovery</span>
+            <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight font-display leading-[1.15]">
+              Personalized <span className="gradient-text-brand">Collegiate Discovery</span>
             </h1>
 
             <p className="text-sm sm:text-base text-slate-300 font-normal leading-relaxed">
-              Connect to 2,000+ high-impact hackathons, conferences, and workshops across 22 major cities in India & globally — matched autonomously to your branch, skills, and target career.
+              Explore 2,000+ curated hackathons, conferences, and workshops across 22 major tech hubs — matched to your skills, branch, and dream career.
             </p>
 
             {/* Quick Hero CTA Buttons */}
             <div className="flex flex-wrap items-center gap-3 pt-2">
               <a
                 href="#discovery-feed"
-                className="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-500 hover:from-purple-500 hover:to-cyan-400 text-white font-bold text-xs sm:text-sm transition-all shadow-xl shadow-purple-950/60 flex items-center gap-2 hover:scale-[1.02]"
+                className="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs sm:text-sm transition-all shadow-md shadow-indigo-950/40 flex items-center gap-2"
               >
-                <span>Explore 2,000+ Opportunities</span>
+                <span>Explore Opportunities</span>
                 <ArrowRight className="w-4 h-4" />
               </a>
 
-              <div className="flex items-center gap-2 px-4 py-3 rounded-2xl bg-slate-900/80 border border-purple-500/30 text-xs font-semibold text-purple-200">
-                <Bot className="w-4 h-4 text-cyan-400 animate-pulse" />
-                <span>AI Chatbot Active (Bottom Right)</span>
+              <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-800/80 border border-slate-700/80 text-xs font-medium text-slate-300">
+                <Bot className="w-4 h-4 text-indigo-400" />
+                <span>AI Assistant Available</span>
               </div>
             </div>
           </div>
 
           {/* Platform Metrics Card */}
-          <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:w-84 flex-shrink-0">
-            <div className="p-4 rounded-2xl bg-slate-900/90 border border-purple-500/20 hover:border-purple-500/50 transition-all text-center group">
-              <div className="text-2xl sm:text-3xl font-black text-white font-display group-hover:scale-105 transition-transform">2,000+</div>
-              <div className="text-xs text-purple-300 font-medium mt-1">Verified Events</div>
+          <div className="grid grid-cols-2 gap-3 lg:w-80 flex-shrink-0">
+            <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 text-center">
+              <div className="text-2xl font-bold text-white font-display">2,000+</div>
+              <div className="text-xs text-slate-400 mt-0.5">Verified Events</div>
             </div>
-            <div className="p-4 rounded-2xl bg-slate-900/90 border border-cyan-500/20 hover:border-cyan-500/50 transition-all text-center group">
-              <div className="text-2xl sm:text-3xl font-black text-cyan-400 font-display group-hover:scale-105 transition-transform">22+</div>
-              <div className="text-xs text-cyan-300 font-medium mt-1">Major Hubs & Cities</div>
+            <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 text-center">
+              <div className="text-2xl font-bold text-indigo-300 font-display">22+</div>
+              <div className="text-xs text-slate-400 mt-0.5">Tech Hubs</div>
             </div>
-            <div className="p-4 rounded-2xl bg-slate-900/90 border border-emerald-500/20 hover:border-emerald-500/50 transition-all text-center group">
-              <div className="text-2xl sm:text-3xl font-black text-emerald-400 font-display group-hover:scale-105 transition-transform">12</div>
-              <div className="text-xs text-emerald-300 font-medium mt-1">Tech Domains</div>
+            <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 text-center">
+              <div className="text-2xl font-bold text-slate-200 font-display">12</div>
+              <div className="text-xs text-slate-400 mt-0.5">Core Domains</div>
             </div>
-            <div className="p-4 rounded-2xl bg-slate-900/90 border border-amber-500/20 hover:border-amber-500/50 transition-all text-center group">
-              <div className="text-2xl sm:text-3xl font-black text-amber-400 font-display group-hover:scale-105 transition-transform">98.4%</div>
-              <div className="text-xs text-amber-300 font-medium mt-1">Match Accuracy</div>
+            <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 text-center">
+              <div className="text-2xl font-bold text-emerald-400 font-display">98.4%</div>
+              <div className="text-xs text-slate-400 mt-0.5">Match Accuracy</div>
             </div>
           </div>
         </div>
       </div>
 
       {/* Active Profile Status / Quick Sign Up Banner */}
-      <div className="p-5 sm:p-6 rounded-2xl glass-panel border border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="p-5 rounded-2xl glass-panel border border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
         {user ? (
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3.5">
             <img
               src={user.avatar}
               alt={user.name}
-              className="w-12 h-12 rounded-2xl object-cover ring-2 ring-purple-500/50 shadow-md shadow-purple-950/40"
+              className="w-11 h-11 rounded-xl object-cover ring-1 ring-slate-700"
             />
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="text-base font-bold text-white font-display">{user.name}</h3>
-                <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/40 text-[11px] font-bold">
+                <h3 className="text-sm font-bold text-white font-display">{user.name}</h3>
+                <span className="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-300 border border-emerald-500/25 text-[10px] font-semibold">
                   Profile Active
                 </span>
               </div>
-              <p className="text-xs text-slate-400 mt-0.5 font-sans">
-                {user.department} • {user.college} • Target: <strong className="text-cyan-400">{user.careerGoals[0]}</strong>
+              <p className="text-xs text-slate-400 mt-0.5">
+                {user.department} • {user.college} • Target: <strong className="text-indigo-300">{user.careerGoals[0]}</strong>
               </p>
             </div>
           </div>
         ) : (
           <div>
-            <h3 className="text-base font-bold text-white font-display">Browsing in Guest Mode</h3>
-            <p className="text-xs text-slate-400 mt-0.5 font-sans">
-              Sign in with Google or Email to unlock 1-click event passes, skill matching, and bookmark sync.
+            <h3 className="text-sm font-bold text-white font-display">Guest Visitor</h3>
+            <p className="text-xs text-slate-400 mt-0.5">
+              Sign in with Google or Email to save bookmarks, issue instant passes, and get tailored AI match scores.
             </p>
           </div>
         )}
 
         <button
           onClick={() => setAuthModalOpen(true)}
-          className="px-5 py-2.5 rounded-xl bg-purple-600/30 hover:bg-purple-600/50 border border-purple-500/50 text-white text-xs font-bold transition-all shadow-md shadow-purple-900/30 flex items-center justify-center gap-2 hover:scale-[1.02]"
+          className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-semibold transition-all flex items-center justify-center gap-2"
         >
-          <Sparkles className="w-4 h-4 text-cyan-400" />
-          <span>{user ? 'Edit Skills & Career Goal' : 'Sign Up with Google / Email'}</span>
+          <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
+          <span>{user ? 'Edit Profile & Goals' : 'Sign In with Google / Email'}</span>
         </button>
       </div>
 
@@ -198,30 +191,30 @@ export default function HomePage() {
       <div id="discovery-feed" className="space-y-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h2 className="text-2xl font-black text-white font-display flex items-center gap-2">
+            <h2 className="text-xl sm:text-2xl font-bold text-white font-display flex items-center gap-2">
               <span>Personalized Opportunity Feed</span>
-              <span className="text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/40 font-mono-acc font-bold">
+              <span className="text-xs px-2.5 py-0.5 rounded-md bg-slate-800 text-slate-300 border border-slate-700 font-mono-acc">
                 {filteredRecommendations.length} Opportunities
               </span>
             </h2>
-            <p className="text-xs text-slate-400 mt-0.5 font-sans">
+            <p className="text-xs text-slate-400 mt-0.5">
               Ranked in real-time by the AI matching engine for {user ? <strong className="text-slate-200">{user.name}</strong> : 'you'}.
             </p>
           </div>
 
           {/* Search Bar & Sort Dropdown */}
           <div className="flex items-center gap-2">
-            <div className="relative flex-1 sm:w-64">
+            <div className="relative flex-1 sm:w-60">
               <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
-                placeholder="Search city, skills, hackathon..."
+                placeholder="Search city, skill, hackathon..."
                 value={searchQuery}
                 onChange={(e) => {
                   setSearchQuery(e.target.value);
                   setVisibleCount(24);
                 }}
-                className="w-full pl-9 pr-3.5 py-2.5 rounded-xl bg-slate-900/90 border border-slate-700 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all font-sans"
+                className="w-full pl-9 pr-3.5 py-2 rounded-xl bg-slate-900/90 border border-slate-700/80 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
               />
             </div>
 
@@ -229,7 +222,7 @@ export default function HomePage() {
               value={sortBy}
               onChange={(e: any) => setSortBy(e.target.value)}
               aria-label="Sort opportunities by"
-              className="px-3 py-2.5 rounded-xl bg-slate-900/90 border border-slate-700 text-xs text-slate-300 focus:outline-none focus:border-cyan-400 transition-all font-sans font-medium"
+              className="px-3 py-2 rounded-xl bg-slate-900/90 border border-slate-700/80 text-xs text-slate-300 focus:outline-none focus:border-indigo-500 transition-colors font-medium"
             >
               <option value="match">Sort by AI Match</option>
               <option value="trust">Sort by Trust Score</option>
@@ -247,10 +240,10 @@ export default function HomePage() {
                 setSelectedCategory(category);
                 setVisibleCount(24);
               }}
-              className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
                 selectedCategory === category
-                  ? 'bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-500 text-white shadow-lg shadow-purple-950/60 scale-[1.02]'
-                  : 'bg-slate-900/80 text-slate-400 hover:text-white hover:bg-slate-800 border border-slate-800'
+                  ? 'bg-indigo-600 text-white shadow-sm border border-indigo-400/40'
+                  : 'bg-slate-900/80 text-slate-400 hover:text-slate-200 hover:bg-slate-800 border border-slate-800/80'
               }`}
             >
               {category}
@@ -260,7 +253,7 @@ export default function HomePage() {
 
         {/* Mode Filter Pills */}
         <div className="flex items-center gap-2 text-xs text-slate-400">
-          <span className="font-bold text-slate-300">Format:</span>
+          <span className="font-semibold text-slate-300">Format:</span>
           {modes.map((mode) => (
             <button
               key={mode}
@@ -268,10 +261,10 @@ export default function HomePage() {
                 setSelectedMode(mode);
                 setVisibleCount(24);
               }}
-              className={`px-3 py-1.5 rounded-lg transition-all font-semibold ${
+              className={`px-3 py-1 rounded-lg transition-colors font-medium ${
                 selectedMode === mode
-                  ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm shadow-cyan-950/40'
-                  : 'hover:text-white bg-slate-900/60 border border-slate-800/80 text-slate-400'
+                  ? 'bg-slate-800 text-indigo-300 border border-indigo-500/30 font-semibold'
+                  : 'hover:text-slate-200 bg-slate-900/60 border border-slate-800/80 text-slate-400'
               }`}
             >
               {mode}
@@ -281,7 +274,7 @@ export default function HomePage() {
       </div>
 
       {/* Event Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {paginatedRecommendations.map((rec) => (
           <EventCard
             key={rec.event.id}
@@ -312,21 +305,21 @@ export default function HomePage() {
 
       {/* Load More Button */}
       {visibleCount < filteredRecommendations.length && (
-        <div className="text-center pt-4 pb-8">
+        <div className="text-center pt-2 pb-6">
           <button
             onClick={() => setVisibleCount(prev => prev + 24)}
-            className="px-8 py-3.5 rounded-2xl bg-slate-900 hover:bg-slate-800 border border-purple-500/40 hover:border-cyan-400 text-white font-bold text-sm transition-all shadow-xl shadow-purple-950/40 inline-flex items-center gap-2 hover:scale-[1.02]"
+            className="px-6 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 font-semibold text-xs transition-all shadow-md inline-flex items-center gap-2"
           >
             <span>Load More Opportunities ({filteredRecommendations.length - visibleCount} remaining)</span>
-            <ChevronDown className="w-4 h-4 text-cyan-400" />
+            <ChevronDown className="w-3.5 h-3.5 text-indigo-400" />
           </button>
         </div>
       )}
 
       {filteredRecommendations.length === 0 && (
-        <div className="p-12 rounded-3xl glass-panel border border-slate-800 text-center space-y-3">
-          <Sparkles className="w-8 h-8 text-slate-500 mx-auto" />
-          <h3 className="text-base font-bold text-white font-display">No matching events found</h3>
+        <div className="p-12 rounded-2xl glass-panel border border-slate-800 text-center space-y-3">
+          <Sparkles className="w-7 h-7 text-slate-500 mx-auto" />
+          <h3 className="text-sm font-bold text-white font-display">No matching events found</h3>
           <p className="text-xs text-slate-400">Try resetting category, city, or search keywords to discover more opportunities.</p>
           <button
             onClick={() => {
@@ -335,7 +328,7 @@ export default function HomePage() {
               setSearchQuery('');
               setVisibleCount(24);
             }}
-            className="px-4 py-2 rounded-xl bg-purple-600 text-white text-xs font-bold"
+            className="px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-semibold"
           >
             Reset Filters
           </button>
