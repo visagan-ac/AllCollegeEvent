@@ -90,100 +90,100 @@ export default function HomePage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       
-      {/* Hero Section */}
-      <div className="relative rounded-3xl p-8 sm:p-10 glass-panel border border-slate-700/60 overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-600/08 rounded-full blur-3xl -z-10" />
+      {/* Hero Section - Calm Soft-Slate Panel */}
+      <div className="relative rounded-3xl p-8 sm:p-10 glass-panel border border-slate-600/30 overflow-hidden shadow-lg">
+        <div className="absolute top-0 right-0 w-[450px] h-[450px] bg-gradient-to-br from-indigo-500/10 via-sky-400/08 to-teal-400/06 rounded-full blur-3xl -z-10" />
         
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
           <div className="max-w-2xl space-y-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/25 text-xs font-semibold text-indigo-300">
-              <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
-              <span>National Opportunity Intelligence Layer • 2,000+ Events</span>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-800/90 border border-slate-600/50 text-xs font-semibold text-sky-200">
+              <Sparkles className="w-3.5 h-3.5 text-sky-400" />
+              <span>Collegiate Opportunity Intelligence • 2,000+ Verified Events</span>
             </div>
 
-            <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight font-display leading-[1.15]">
-              Personalized <span className="gradient-text-brand">Collegiate Discovery</span>
+            <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight font-display leading-[1.15]">
+              AI-Powered <span className="gradient-text-calm">Opportunity Discovery</span>
             </h1>
 
             <p className="text-sm sm:text-base text-slate-300 font-normal leading-relaxed">
-              Explore 2,000+ curated hackathons, conferences, and workshops across 22 major tech hubs — matched to your skills, branch, and dream career.
+              Explore 2,000+ curated hackathons, workshops, and student summits across 22 major cities — tailored autonomously to your branch, skills, and target career.
             </p>
 
             {/* Quick Hero CTA Buttons */}
             <div className="flex flex-wrap items-center gap-3 pt-2">
               <a
                 href="#discovery-feed"
-                className="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs sm:text-sm transition-all shadow-md shadow-indigo-950/40 flex items-center gap-2"
+                className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-500 to-sky-500 hover:from-indigo-400 hover:to-sky-400 text-white font-bold text-xs sm:text-sm transition-all shadow-md shadow-indigo-950/40 flex items-center gap-2"
               >
-                <span>Explore Opportunities</span>
+                <span>Explore 2,000+ Opportunities</span>
                 <ArrowRight className="w-4 h-4" />
               </a>
 
-              <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-800/80 border border-slate-700/80 text-xs font-medium text-slate-300">
-                <Bot className="w-4 h-4 text-indigo-400" />
-                <span>AI Assistant Available</span>
+              <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-800/90 border border-slate-700 text-xs font-medium text-slate-300">
+                <Bot className="w-4 h-4 text-sky-400" />
+                <span>AI Chatbot Active</span>
               </div>
             </div>
           </div>
 
           {/* Platform Metrics Card */}
           <div className="grid grid-cols-2 gap-3 lg:w-80 flex-shrink-0">
-            <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 text-center">
-              <div className="text-2xl font-bold text-white font-display">2,000+</div>
-              <div className="text-xs text-slate-400 mt-0.5">Verified Events</div>
+            <div className="p-4 rounded-2xl bg-slate-800/80 border border-slate-700/80 text-center">
+              <div className="text-2xl sm:text-3xl font-extrabold text-white font-display">2,000+</div>
+              <div className="text-xs text-sky-200 mt-1 font-medium">Verified Events</div>
             </div>
-            <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 text-center">
-              <div className="text-2xl font-bold text-indigo-300 font-display">22+</div>
-              <div className="text-xs text-slate-400 mt-0.5">Tech Hubs</div>
+            <div className="p-4 rounded-2xl bg-slate-800/80 border border-slate-700/80 text-center">
+              <div className="text-2xl sm:text-3xl font-extrabold text-indigo-300 font-display">22+</div>
+              <div className="text-xs text-indigo-200 mt-1 font-medium">Tech Cities</div>
             </div>
-            <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 text-center">
-              <div className="text-2xl font-bold text-slate-200 font-display">12</div>
-              <div className="text-xs text-slate-400 mt-0.5">Core Domains</div>
+            <div className="p-4 rounded-2xl bg-slate-800/80 border border-slate-700/80 text-center">
+              <div className="text-2xl sm:text-3xl font-extrabold text-teal-300 font-display">12</div>
+              <div className="text-xs text-teal-200 mt-1 font-medium">Domains</div>
             </div>
-            <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 text-center">
-              <div className="text-2xl font-bold text-emerald-400 font-display">98.4%</div>
-              <div className="text-xs text-slate-400 mt-0.5">Match Accuracy</div>
+            <div className="p-4 rounded-2xl bg-slate-800/80 border border-slate-700/80 text-center">
+              <div className="text-2xl sm:text-3xl font-extrabold text-emerald-300 font-display">98.4%</div>
+              <div className="text-xs text-emerald-200 mt-1 font-medium">Match Accuracy</div>
             </div>
           </div>
         </div>
       </div>
 
       {/* Active Profile Status / Quick Sign Up Banner */}
-      <div className="p-5 rounded-2xl glass-panel border border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="p-5 rounded-2xl glass-panel border border-slate-700/60 flex flex-col md:flex-row md:items-center justify-between gap-4">
         {user ? (
           <div className="flex items-center gap-3.5">
             <img
               src={user.avatar}
               alt={user.name}
-              className="w-11 h-11 rounded-xl object-cover ring-1 ring-slate-700"
+              className="w-11 h-11 rounded-xl object-cover ring-1 ring-slate-600 shadow-sm"
             />
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="text-sm font-bold text-white font-display">{user.name}</h3>
-                <span className="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-300 border border-emerald-500/25 text-[10px] font-semibold">
+                <span className="px-2 py-0.5 rounded-md bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-[10px] font-bold">
                   Profile Active
                 </span>
               </div>
-              <p className="text-xs text-slate-400 mt-0.5">
-                {user.department} • {user.college} • Target: <strong className="text-indigo-300">{user.careerGoals[0]}</strong>
+              <p className="text-xs text-slate-300 mt-0.5">
+                {user.department} • {user.college} • Target: <strong className="text-sky-300">{user.careerGoals[0]}</strong>
               </p>
             </div>
           </div>
         ) : (
           <div>
-            <h3 className="text-sm font-bold text-white font-display">Guest Visitor</h3>
-            <p className="text-xs text-slate-400 mt-0.5">
-              Sign in with Google or Email to save bookmarks, issue instant passes, and get tailored AI match scores.
+            <h3 className="text-sm font-bold text-white font-display">Guest Mode</h3>
+            <p className="text-xs text-slate-300 mt-0.5">
+              Sign in with Google or Email to unlock 1-click passes, bookmarks, and customized skill rankings.
             </p>
           </div>
         )}
 
         <button
           onClick={() => setAuthModalOpen(true)}
-          className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-semibold transition-all flex items-center justify-center gap-2"
+          className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-200 text-xs font-semibold transition-all flex items-center justify-center gap-2 shadow-sm"
         >
-          <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
-          <span>{user ? 'Edit Profile & Goals' : 'Sign In with Google / Email'}</span>
+          <Sparkles className="w-3.5 h-3.5 text-sky-400" />
+          <span>{user ? 'Edit Profile & Goals' : 'Sign Up with Google / Email'}</span>
         </button>
       </div>
 
@@ -191,9 +191,9 @@ export default function HomePage() {
       <div id="discovery-feed" className="space-y-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h2 className="text-xl sm:text-2xl font-bold text-white font-display flex items-center gap-2">
+            <h2 className="text-xl sm:text-2xl font-black text-white font-display flex items-center gap-2">
               <span>Personalized Opportunity Feed</span>
-              <span className="text-xs px-2.5 py-0.5 rounded-md bg-slate-800 text-slate-300 border border-slate-700 font-mono-acc">
+              <span className="text-xs px-2.5 py-0.5 rounded-md bg-slate-800 text-slate-200 border border-slate-700 font-mono-acc font-semibold">
                 {filteredRecommendations.length} Opportunities
               </span>
             </h2>
@@ -214,7 +214,7 @@ export default function HomePage() {
                   setSearchQuery(e.target.value);
                   setVisibleCount(24);
                 }}
-                className="w-full pl-9 pr-3.5 py-2 rounded-xl bg-slate-900/90 border border-slate-700/80 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+                className="w-full pl-9 pr-3.5 py-2 rounded-xl bg-slate-800/90 border border-slate-700 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-sky-400 transition-colors"
               />
             </div>
 
@@ -222,7 +222,7 @@ export default function HomePage() {
               value={sortBy}
               onChange={(e: any) => setSortBy(e.target.value)}
               aria-label="Sort opportunities by"
-              className="px-3 py-2 rounded-xl bg-slate-900/90 border border-slate-700/80 text-xs text-slate-300 focus:outline-none focus:border-indigo-500 transition-colors font-medium"
+              className="px-3 py-2 rounded-xl bg-slate-800/90 border border-slate-700 text-xs text-slate-300 focus:outline-none focus:border-sky-400 transition-colors font-medium"
             >
               <option value="match">Sort by AI Match</option>
               <option value="trust">Sort by Trust Score</option>
@@ -231,7 +231,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Category Filter Pills */}
+        {/* Stylish Mild Category Filter Pills */}
         <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
           {categories.map((category) => (
             <button
@@ -242,8 +242,8 @@ export default function HomePage() {
               }}
               className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
                 selectedCategory === category
-                  ? 'bg-indigo-600 text-white shadow-sm border border-indigo-400/40'
-                  : 'bg-slate-900/80 text-slate-400 hover:text-slate-200 hover:bg-slate-800 border border-slate-800/80'
+                  ? 'bg-gradient-to-r from-indigo-500 to-sky-500 text-white shadow-md border border-indigo-300/40'
+                  : 'bg-slate-800/80 text-slate-300 hover:text-white hover:bg-slate-700 border border-slate-700/80'
               }`}
             >
               {category}
@@ -261,10 +261,10 @@ export default function HomePage() {
                 setSelectedMode(mode);
                 setVisibleCount(24);
               }}
-              className={`px-3 py-1 rounded-lg transition-colors font-medium ${
+              className={`px-3 py-1.5 rounded-lg transition-colors font-medium ${
                 selectedMode === mode
-                  ? 'bg-slate-800 text-indigo-300 border border-indigo-500/30 font-semibold'
-                  : 'hover:text-slate-200 bg-slate-900/60 border border-slate-800/80 text-slate-400'
+                  ? 'bg-sky-500/20 text-sky-200 border border-sky-400/40 font-semibold'
+                  : 'hover:text-slate-200 bg-slate-800/70 border border-slate-700/70 text-slate-400'
               }`}
             >
               {mode}
@@ -308,19 +308,19 @@ export default function HomePage() {
         <div className="text-center pt-2 pb-6">
           <button
             onClick={() => setVisibleCount(prev => prev + 24)}
-            className="px-6 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 font-semibold text-xs transition-all shadow-md inline-flex items-center gap-2"
+            className="px-6 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-200 font-semibold text-xs transition-all shadow-md inline-flex items-center gap-2"
           >
             <span>Load More Opportunities ({filteredRecommendations.length - visibleCount} remaining)</span>
-            <ChevronDown className="w-3.5 h-3.5 text-indigo-400" />
+            <ChevronDown className="w-3.5 h-3.5 text-sky-400" />
           </button>
         </div>
       )}
 
       {filteredRecommendations.length === 0 && (
-        <div className="p-12 rounded-2xl glass-panel border border-slate-800 text-center space-y-3">
-          <Sparkles className="w-7 h-7 text-slate-500 mx-auto" />
+        <div className="p-12 rounded-2xl glass-panel border border-slate-700 text-center space-y-3">
+          <Sparkles className="w-7 h-7 text-slate-400 mx-auto" />
           <h3 className="text-sm font-bold text-white font-display">No matching events found</h3>
-          <p className="text-xs text-slate-400">Try resetting category, city, or search keywords to discover more opportunities.</p>
+          <p className="text-xs text-slate-300">Try resetting category, city, or search keywords to discover more opportunities.</p>
           <button
             onClick={() => {
               setSelectedCategory('All');
