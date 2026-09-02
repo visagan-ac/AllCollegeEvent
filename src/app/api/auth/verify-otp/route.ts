@@ -17,12 +17,10 @@ export async function POST(req: NextRequest) {
     const cleanEmail = email.trim().toLowerCase();
     const cleanOtp = otp.trim();
 
-    // 1. Verify OTP: check master test code, in-memory cache, or database
+    // 1. Strictly verify real OTP from cache or Neon PostgreSQL
     let isValid = false;
 
-    if (cleanOtp === '123456') {
-      isValid = true;
-    } else if (global.__GLOBAL_OTP_CACHE?.has(cleanEmail)) {
+    if (global.__GLOBAL_OTP_CACHE?.has(cleanEmail)) {
       const cached = global.__GLOBAL_OTP_CACHE.get(cleanEmail);
       if (cached && cached.otp === cleanOtp && cached.expiresAt > Date.now()) {
         isValid = true;

@@ -30,7 +30,6 @@ export default function AuthModal() {
   const [authMethod, setAuthMethod] = useState<'options' | 'email_otp' | 'onboarding'>('options');
   const [email, setEmail] = useState('');
   const [otp, setOtp] = useState('');
-  const [serverOtp, setServerOtp] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
   const [avatar, setAvatar] = useState('');
@@ -121,10 +120,6 @@ export default function AuthModal() {
         setErrorMsg(data.error || 'Failed to send verification code.');
         setLoading(false);
         return;
-      }
-
-      if (data.devOtp) {
-        setServerOtp(data.devOtp);
       }
 
       setAuthMethod('email_otp');
@@ -371,30 +366,6 @@ export default function AuthModal() {
                       className="w-11 h-12 sm:w-12 sm:h-14 text-center text-xl sm:text-2xl font-bold font-mono text-white bg-slate-900/90 border border-slate-700 rounded-xl focus:outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-500/20 transition-all shadow-inner"
                     />
                   ))}
-                </div>
-
-                {/* Instant Dev Helper */}
-                <div className="flex flex-col items-center gap-2 mt-3">
-                  {serverOtp && (
-                    <div className="flex items-center justify-center gap-2 p-2.5 rounded-xl bg-sky-950/60 border border-sky-500/30 text-xs text-sky-200 w-full">
-                      <span>Generated Code: <strong className="font-mono text-sky-300 text-sm tracking-wider">{serverOtp}</strong></span>
-                      <button
-                        type="button"
-                        onClick={() => setOtp(serverOtp)}
-                        className="px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 hover:bg-sky-500/30 font-semibold text-[11px] transition-colors"
-                      >
-                        Fill Code
-                      </button>
-                    </div>
-                  )}
-
-                  <button
-                    type="button"
-                    onClick={() => setOtp('123456')}
-                    className="text-[11px] px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 font-mono-acc transition-colors"
-                  >
-                    ⚡ Or use Universal Master Code (123456)
-                  </button>
                 </div>
               </div>
 

@@ -124,16 +124,15 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    console.log(`🔐 [OTP DISPATCH] Code for ${cleanEmail}: ${otp} (Dispatched via: ${dispatchMethod})`);
+    console.log(`🔐 [OTP DISPATCH] Code dispatched for ${cleanEmail} (Via: ${dispatchMethod})`);
 
     return NextResponse.json({
       success: true,
       message: emailSent 
         ? `Verification code sent to ${cleanEmail}` 
-        : `Verification code generated for ${cleanEmail}`,
+        : `Verification code dispatched to ${cleanEmail}`,
       emailSent,
       dispatchMethod,
-      devOtp: otp,
     });
   } catch (error: any) {
     console.error('Error in send-otp route:', error);
