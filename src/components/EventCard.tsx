@@ -25,10 +25,19 @@ interface EventCardProps {
 
 export default function EventCard({ recommendation, student, onOpenDetail, onOpenExplainer }: EventCardProps) {
   const { event, matchScore, matchedSkills, careerBridgeImpact, matchTier } = recommendation;
-  const { bookmarkedEventIds, registeredEventIds, toggleBookmark } = useApp();
+  const { user, isAuthenticated, setAuthModalOpen, bookmarkedEventIds, registeredEventIds, toggleBookmark } = useApp();
   
   const isBookmarked = bookmarkedEventIds.includes(event.id);
   const isRegistered = registeredEventIds.includes(event.id);
+
+  const handleBookmark = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!isAuthenticated || !user) {
+      setAuthModalOpen(true);
+      return;
+    }
+    toggleBookmark(event.id);
+  };
 
   // Match score color classes
   const getScoreColor = (score: number) => {
@@ -160,7 +169,7 @@ export default function EventCard({ recommendation, student, onOpenDetail, onOpe
       <div className="mt-5 pt-3 border-t border-slate-800/80 flex items-center justify-between gap-2">
         <div className="flex items-center gap-1.5">
           <button
-            onClick={() => toggleBookmark(event.id)}
+            onClick={handleBookmark}
             title={isBookmarked ? "Remove Bookmark" : "Save Event"}
             className={`p-2 rounded-xl border transition-all ${
               isBookmarked
