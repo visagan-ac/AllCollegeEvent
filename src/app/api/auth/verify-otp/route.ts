@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
+declare global {
+  var __GLOBAL_OTP_CACHE: Map<string, { otp: string; expiresAt: number }> | undefined;
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -13,28 +17,35 @@ export async function POST(req: NextRequest) {
     const cleanEmail = email.trim().toLowerCase();
     const cleanOtp = otp.trim();
 
-    // 1. Verify OTP in PostgreSQL (or master test code 123456)
+    // 1. Verify OTP: check master test code, in-memory cache, or database
     let isValid = false;
 
     if (cleanOtp === '123456') {
       isValid = true;
-    } else {
-      const record = await prisma.otpVerification.findFirst({
-        where: {
-          email: cleanEmail,
-          otp: cleanOtp,
-          expiresAt: {
-            gt: new Date(),
-          },
-        },
-      });
-
-      if (record) {
+    } else if (global.__GLOBAL_OTP_CACHE?.has(cleanEmail)) {
+      const cached = global.__GLOBAL_OTP_CACHE.get(cleanEmail);
+      if (cached && cached.otp === cleanOtp && cached.expiresAt > Date.now()) {
         isValid = true;
-        // Delete verified OTP
-        await prisma.otpVerification.delete({
-          where: { id: record.id },
+        global.__GLOBAL_OTP_CACHE.delete(cleanEmail);
+      }
+    }
+
+    if (!isValid) {
+      try {
+        const record = await prisma.otpVerification.findFirst({
+          where: {
+            email: cleanEmail,
+            otp: cleanOtp,
+            expiresAt: { gt: new Date() },
+          },
         });
+
+        if (record) {
+          isValid = true;
+          await prisma.otpVerification.delete({ where: { id: record.id } });
+        }
+      } catch (dbErr) {
+        console.warn('DB verification fallback');
       }
     }
 
@@ -46,17 +57,18 @@ export async function POST(req: NextRequest) {
     }
 
     // 2. Check if user already exists in PostgreSQL
-    const existingUser = await prisma.user.findUnique({
-      where: { email: cleanEmail },
-      include: {
-        skills: {
-          include: {
-            skill: true,
-          },
+    let existingUser: any = null;
+    try {
+      existingUser = await prisma.user.findUnique({
+        where: { email: cleanEmail },
+        include: {
+          skills: { include: { skill: true } },
+          interactions: true,
         },
-        interactions: true,
-      },
-    });
+      });
+    } catch (dbErr) {
+      console.warn('User profile query fallback');
+    }
 
     if (existingUser) {
       const studentProfile = {

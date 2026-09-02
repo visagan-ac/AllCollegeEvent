@@ -308,29 +308,76 @@ export default function AuthModal() {
         {authMethod === 'email_otp' && (
           <div className="space-y-6">
             <div className="text-center">
-              <div className="w-12 h-12 rounded-2xl bg-cyan-500/20 border border-cyan-500/30 flex items-center justify-center mx-auto text-cyan-400">
-                <KeyRound className="w-6 h-6" />
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-sky-500 to-indigo-500 p-[1px] mx-auto shadow-lg shadow-sky-950/40">
+                <div className="w-full h-full bg-[#131b2e] rounded-[15px] flex items-center justify-center">
+                  <KeyRound className="w-6 h-6 text-sky-400" />
+                </div>
               </div>
               <h2 className="text-xl font-extrabold text-white mt-3 font-display">
                 Enter Verification Code
               </h2>
               <p className="text-xs text-slate-300 mt-1">
-                We sent a 6-digit verification code to <strong className="text-cyan-300">{email}</strong>. Please check your inbox.
+                We sent a 6-digit verification code to <strong className="text-sky-300">{email}</strong>.
               </p>
             </div>
 
-            <form onSubmit={handleVerifyOtp} className="space-y-4">
+            <form onSubmit={handleVerifyOtp} className="space-y-5">
+              {/* 6-Box PIN Inputs */}
               <div>
-                <label className="text-xs text-slate-300 font-semibold block mb-1">6-Digit Code</label>
-                <input
-                  type="text"
-                  maxLength={6}
-                  required
-                  placeholder="e.g. 849201"
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value)}
-                  className="w-full text-center tracking-widest text-lg font-mono py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500"
-                />
+                <label className="text-xs text-slate-300 font-semibold block mb-2 text-center">
+                  Enter 6-Digit Code
+                </label>
+                <div className="flex justify-center items-center gap-2">
+                  {[0, 1, 2, 3, 4, 5].map((idx) => (
+                    <input
+                      key={idx}
+                      id={`otp-box-${idx}`}
+                      type="text"
+                      inputMode="numeric"
+                      maxLength={1}
+                      value={otp[idx] || ''}
+                      onChange={(e) => {
+                        const val = e.target.value.replace(/[^0-9]/g, '');
+                        const otpArr = (otp || '').padEnd(6, ' ').split('');
+                        otpArr[idx] = val;
+                        const newOtp = otpArr.join('').trim();
+                        setOtp(newOtp);
+
+                        if (val && idx < 5) {
+                          const nextInput = document.getElementById(`otp-box-${idx + 1}`);
+                          nextInput?.focus();
+                        }
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Backspace' && !otp[idx] && idx > 0) {
+                          const prevInput = document.getElementById(`otp-box-${idx - 1}`);
+                          prevInput?.focus();
+                        }
+                      }}
+                      onPaste={(e) => {
+                        e.preventDefault();
+                        const pasted = e.clipboardData.getData('text').replace(/[^0-9]/g, '').slice(0, 6);
+                        if (pasted) {
+                          setOtp(pasted);
+                          const targetIdx = Math.min(pasted.length, 5);
+                          document.getElementById(`otp-box-${targetIdx}`)?.focus();
+                        }
+                      }}
+                      className="w-11 h-12 sm:w-12 sm:h-14 text-center text-xl sm:text-2xl font-bold font-mono text-white bg-slate-900/90 border border-slate-700 rounded-xl focus:outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-500/20 transition-all shadow-inner"
+                    />
+                  ))}
+                </div>
+
+                {/* Instant Dev Helper */}
+                <div className="flex justify-center mt-3">
+                  <button
+                    type="button"
+                    onClick={() => setOtp('123456')}
+                    className="text-[11px] px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-sky-300 border border-slate-700 font-mono-acc transition-colors"
+                  >
+                    ⚡ Auto-Fill Test OTP (123456)
+                  </button>
+                </div>
               </div>
 
               {errorMsg && (
@@ -339,14 +386,14 @@ export default function AuthModal() {
 
               <button
                 type="submit"
-                disabled={loading}
-                className="w-full py-2.5 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold text-sm transition-all shadow-md shadow-cyan-900/30 flex items-center justify-center gap-2 disabled:opacity-50"
+                disabled={loading || otp.replace(/\s/g, '').length < 6}
+                className="w-full py-3 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-bold text-sm transition-all shadow-lg shadow-sky-950/40 flex items-center justify-center gap-2 disabled:opacity-50"
               >
                 {loading ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
                 ) : (
                   <>
-                    <span>Verify & Continue</span>
+                    <span>Verify Code & Continue</span>
                     <CheckCircle2 className="w-4 h-4" />
                   </>
                 )}
@@ -366,7 +413,7 @@ export default function AuthModal() {
                 <button
                   type="button"
                   onClick={handleSendOtp}
-                  className="text-cyan-400 hover:underline"
+                  className="text-sky-400 hover:underline"
                 >
                   Resend Code
                 </button>
