@@ -14,7 +14,8 @@ import {
   Bot, 
   ChevronDown,
   X,
-  Filter
+  Filter,
+  CornerDownLeft
 } from 'lucide-react';
 
 export default function HomePage() {
@@ -25,6 +26,7 @@ export default function HomePage() {
     events
   } = useApp();
 
+  const [searchInput, setSearchInput] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [selectedMode, setSelectedMode] = useState<string>('All');
@@ -68,6 +70,26 @@ export default function HomePage() {
     'Workshop'
   ];
 
+  // Execute search on Enter key or Search button click
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSearchQuery(searchInput);
+    setVisibleCount(24);
+  };
+
+  const handleClearSearch = () => {
+    setSearchInput('');
+    setSearchQuery('');
+    setVisibleCount(24);
+  };
+
+  const handleQuickTagClick = (tag: string) => {
+    setSearchInput(tag);
+    setSearchQuery(tag);
+    setSelectedCategory('All');
+    setVisibleCount(24);
+  };
+
   // Universal Multi-Keyword Full-Text Search
   const searchTokens = searchQuery.toLowerCase().trim().split(/\s+/).filter(Boolean);
 
@@ -80,7 +102,7 @@ export default function HomePage() {
       event?.category || '',
       event?.type || '',
       event?.mode || '',
-      event?.city || '',
+      (event as any)?.city || '',
       event?.location || (event as any)?.locationVenue || '',
       event?.organizer?.name || '',
       event?.organizer?.college || '',
@@ -228,37 +250,47 @@ export default function HomePage() {
               </span>
             </h2>
             <p className="text-xs text-slate-400 mt-0.5">
-              Search by any skill, city, college, organizer, topic, or role across all 2,000+ opportunities.
+              Search by skill, city, college, organizer, topic, or role across all 2,000+ opportunities.
             </p>
           </div>
 
-          {/* Search Bar & Sort Dropdown */}
+          {/* Search Form with Enter Support & Search Button */}
           <div className="flex items-center gap-2">
-            <div className="relative flex-1 sm:w-80">
-              <Search className="w-4 h-4 text-sky-400 absolute left-3 top-1/2 -translate-y-1/2" />
-              <input
-                type="text"
-                placeholder="Search by city, skill, college, hackathon, role..."
-                value={searchQuery}
-                onChange={(e) => {
-                  setSearchQuery(e.target.value);
-                  setVisibleCount(24);
-                }}
-                className="w-full pl-9 pr-8 py-2.5 rounded-xl bg-slate-800/90 border border-slate-700 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400 transition-all font-sans"
-              />
-              {searchQuery && (
-                <button
-                  onClick={() => {
-                    setSearchQuery('');
+            <form onSubmit={handleSearchSubmit} className="flex items-center gap-2 flex-1 sm:w-96">
+              <div className="relative flex-1">
+                <Search className="w-4 h-4 text-sky-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  placeholder="Search city, skill, college, hackathon, role..."
+                  value={searchInput}
+                  onChange={(e) => {
+                    setSearchInput(e.target.value);
+                    setSearchQuery(e.target.value);
                     setVisibleCount(24);
                   }}
-                  title="Clear search"
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 rounded-md text-slate-400 hover:text-white hover:bg-slate-700 transition-colors"
-                >
-                  <X className="w-3.5 h-3.5" />
-                </button>
-              )}
-            </div>
+                  className="w-full pl-9 pr-8 py-2.5 rounded-xl bg-slate-800/90 border border-slate-700 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400 transition-all font-sans"
+                />
+                {searchInput && (
+                  <button
+                    type="button"
+                    onClick={handleClearSearch}
+                    title="Clear search"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 rounded-md text-slate-400 hover:text-white hover:bg-slate-700 transition-colors"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                )}
+              </div>
+
+              {/* Explicit Search Button with Enter Support */}
+              <button
+                type="submit"
+                className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-indigo-500 to-sky-500 hover:from-indigo-400 hover:to-sky-400 text-white font-bold text-xs transition-all shadow-md shadow-indigo-950/30 flex items-center gap-1.5 flex-shrink-0"
+              >
+                <span>Search</span>
+                <CornerDownLeft className="w-3.5 h-3.5 opacity-80" />
+              </button>
+            </form>
 
             <select
               value={sortBy}
@@ -273,7 +305,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Quick Search Suggestions Pills */}
+        {/* Active Search Filter Badge & Quick Search Suggestions Pills */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none text-[11px] text-slate-400">
           <span className="font-semibold text-slate-400 flex items-center gap-1 flex-shrink-0">
             <Filter className="w-3 h-3 text-sky-400" /> Popular:
@@ -281,11 +313,8 @@ export default function HomePage() {
           {quickSearchTags.map(tag => (
             <button
               key={tag}
-              onClick={() => {
-                setSearchQuery(tag);
-                setSelectedCategory('All');
-                setVisibleCount(24);
-              }}
+              type="button"
+              onClick={() => handleQuickTagClick(tag)}
               className={`px-2.5 py-0.5 rounded-full border transition-all flex-shrink-0 ${
                 searchQuery.toLowerCase() === tag.toLowerCase()
                   ? 'bg-sky-500/20 text-sky-200 border-sky-400/50 font-bold'
@@ -297,15 +326,11 @@ export default function HomePage() {
           ))}
           {searchQuery && (
             <button
-              onClick={() => {
-                setSearchQuery('');
-                setSelectedCategory('All');
-                setSelectedMode('All');
-                setVisibleCount(24);
-              }}
+              type="button"
+              onClick={handleClearSearch}
               className="text-rose-400 hover:underline font-semibold ml-1 flex-shrink-0"
             >
-              Clear All
+              Clear Search ({searchQuery})
             </button>
           )}
         </div>
@@ -401,12 +426,7 @@ export default function HomePage() {
           <h3 className="text-sm font-bold text-white font-display">No matching events found for &quot;{searchQuery}&quot;</h3>
           <p className="text-xs text-slate-300">Try searching for keywords like &quot;Python&quot;, &quot;Bengaluru&quot;, &quot;Hackathon&quot;, or &quot;Web3&quot;.</p>
           <button
-            onClick={() => {
-              setSelectedCategory('All');
-              setSelectedMode('All');
-              setSearchQuery('');
-              setVisibleCount(24);
-            }}
+            onClick={handleClearSearch}
             className="px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-semibold"
           >
             Reset Filters
