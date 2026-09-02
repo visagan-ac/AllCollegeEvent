@@ -16,7 +16,9 @@ import {
   Key, 
   Check, 
   ExternalLink,
-  ShieldCheck
+  ShieldCheck,
+  Copy,
+  Code
 } from 'lucide-react';
 
 interface AIChatbotProps {
@@ -32,6 +34,7 @@ export default function AIChatbot({ onOpenEventDetail }: AIChatbotProps) {
   const [apiLatency, setApiLatency] = useState<number | null>(null);
   const [activeModelName, setActiveModelName] = useState<string>('Google Gemini 1.5 Flash');
   const [isServerGeminiActive, setIsServerGeminiActive] = useState<boolean>(true);
+  const [copiedCodeIndex, setCopiedCodeIndex] = useState<string | null>(null);
 
   // Gemini API Key State for optional manual override
   const [geminiApiKey, setGeminiApiKey] = useState<string>('');
@@ -70,7 +73,7 @@ export default function AIChatbot({ onOpenEventDetail }: AIChatbotProps) {
     } else {
       localStorage.removeItem('gemini_api_key');
       setGeminiApiKey('');
-      setActiveModelName(isServerGeminiActive ? 'Google Gemini 1.5 Flash' : 'Local AI v2.1');
+      setActiveModelName(isServerGeminiActive ? 'Google Gemini 1.5 Flash' : 'AllCollegeEvent AI');
     }
     setKeySavedToast(true);
     setTimeout(() => {
@@ -79,22 +82,16 @@ export default function AIChatbot({ onOpenEventDetail }: AIChatbotProps) {
     }, 1200);
   };
 
-  const [isMounted, setIsMounted] = useState<boolean>(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
   const initialWelcomeMessage: ChatMessage = {
     id: 'welcome',
     sender: 'ai',
-    text: `👋 Hi **${user?.name ? user.name.split(' ')[0] : 'there'}**! I am your **AllCollegeEvent AI Copilot**.\n\n⚡ **Powered by Google Gemini 1.5 Flash**\n\nI can analyze upcoming hackathons, find opportunities matching your **${user?.careerGoals[0] || 'AI/ML Engineer'}** goal, explain eligibility, or write starter code templates.\n\nHow can I help you discover opportunities today?`,
+    text: `👋 Hi **${user?.name ? user.name.split(' ')[0] : 'Innovator'}**! I am your **AllCollegeEvent AI Copilot**.\n\n⚡ **Powered by Google Gemini 1.5 Flash & Neon PostgreSQL (2,000+ live events)**\n\nI can:\n• Find top hackathons matching your **${user?.careerGoals[0] || 'Target Career'}**\n• Explain rules, team formation, and cash prize breakdowns\n• Generate technical architectures and starter code templates (FastAPI, PyTorch, React, Solidity)\n• Analyze your skill gaps and suggest roadmaps\n\nWhat would you like to explore today?`,
     timestamp: 'Just now',
-    suggestedEventIds: ['allcollege-grand-hackathon-2026', 'ai-vision-summit-2026'],
+    suggestedEventIds: ['allcollege-grand-hackathon-2026'],
     quickReplies: [
-      'National Grand Hackathon 2026',
-      'What are the cash prizes & grants?',
+      'Top hackathons with cash prizes',
       'Give me an AI project idea',
+      'FastAPI starter code',
       'How to win a hackathon?'
     ]
   };
@@ -171,15 +168,21 @@ export default function AIChatbot({ onOpenEventDetail }: AIChatbotProps) {
       const fallbackMsg: ChatMessage = {
         id: `ai-${Date.now()}`,
         sender: 'ai',
-        text: `✨ I processed your query about "${query}". Check out **National Collegiate Grand Offline Hackathon 2026** (₹5L prize pool) and **NeurAI 2026**!`,
+        text: `✨ I analyzed your question regarding "${query}". Check out our **2,000+ live opportunities** in the feed for high-prize hackathons, workshops, and student summits!`,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        suggestedEventIds: ['allcollege-grand-hackathon-2026'],
-        quickReplies: ['Grand Hackathon 2026', 'Show prizes', 'Offline events']
+        suggestedEventIds: events.slice(0, 2).map(e => e.id),
+        quickReplies: ['Show AI Hackathons', 'Offline events', 'Give me starter code']
       };
       setMessages(prev => [...prev, fallbackMsg]);
     } finally {
       setIsTyping(false);
     }
+  };
+
+  const copyToClipboard = (code: string, id: string) => {
+    navigator.clipboard.writeText(code);
+    setCopiedCodeIndex(id);
+    setTimeout(() => setCopiedCodeIndex(null), 1500);
   };
 
   const clearChat = () => {
@@ -193,16 +196,16 @@ export default function AIChatbot({ onOpenEventDetail }: AIChatbotProps) {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 px-4 py-3 rounded-2xl bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-500 text-white font-bold text-sm shadow-2xl shadow-purple-900/60 hover:scale-105 transition-all duration-300 group border border-purple-400/40"
+          className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 px-4 py-3 rounded-2xl bg-gradient-to-r from-indigo-500 to-sky-500 text-white font-bold text-sm shadow-xl shadow-indigo-950/40 hover:scale-105 transition-all duration-200 group border border-sky-300/30"
         >
           <div className="relative">
-            <Sparkles className="w-5 h-5 text-cyan-300 group-hover:rotate-12 transition-transform animate-pulse" />
-            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-emerald-400 ring-2 ring-slate-900 animate-ping" />
+            <Sparkles className="w-5 h-5 text-white group-hover:rotate-12 transition-transform animate-pulse" />
+            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-emerald-400 ring-2 ring-slate-900" />
           </div>
           <div className="flex flex-col text-left">
-            <span>Ask AI Copilot</span>
-            <span className="text-[10px] text-cyan-200 font-mono font-normal">
-              ⚡ Gemini Active
+            <span>AI Copilot</span>
+            <span className="text-[10px] text-sky-100 font-mono-acc font-normal">
+              ⚡ Gemini Live
             </span>
           </div>
         </button>
@@ -211,34 +214,34 @@ export default function AIChatbot({ onOpenEventDetail }: AIChatbotProps) {
       {/* Chatbot Window */}
       {isOpen && (
         <div
-          className={`fixed z-50 transition-all duration-300 flex flex-col glass-panel border border-purple-500/40 shadow-2xl shadow-black/90 ${
+          className={`fixed z-50 transition-all duration-300 flex flex-col glass-panel border border-slate-600/40 shadow-2xl ${
             isExpanded
               ? 'inset-4 sm:inset-10 rounded-3xl'
-              : 'bottom-6 right-4 sm:right-6 w-full max-w-[440px] h-[620px] rounded-3xl'
+              : 'bottom-6 right-4 sm:right-6 w-full max-w-[460px] h-[640px] rounded-3xl'
           }`}
         >
           {/* Header */}
-          <div className="flex items-center justify-between p-4 border-b border-slate-800 bg-[#0d1222]/95 rounded-t-3xl">
+          <div className="flex items-center justify-between p-4 border-b border-slate-700 bg-[#182238]/95 rounded-t-3xl">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-purple-600 to-cyan-400 p-[1px]">
-                <div className="w-full h-full bg-[#090d16] rounded-[11px] flex items-center justify-center">
-                  <Bot className="w-5 h-5 text-cyan-400" />
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-500 to-sky-400 p-[1px]">
+                <div className="w-full h-full bg-[#141b2d] rounded-[11px] flex items-center justify-center">
+                  <Bot className="w-5 h-5 text-sky-400" />
                 </div>
               </div>
               <div>
                 <div className="flex items-center gap-1.5">
                   <span className="text-sm font-bold text-white font-display">AI Event Copilot</span>
-                  <span className="text-[10px] px-1.5 py-0.2 rounded bg-cyan-500/15 text-cyan-300 font-mono">
+                  <span className="text-[10px] px-1.5 py-0.2 rounded bg-sky-500/15 text-sky-300 font-mono-acc font-semibold">
                     Gemini 1.5
                   </span>
                 </div>
                 <div className="flex items-center gap-2 text-[11px] text-slate-400">
-                  <span className="flex items-center gap-1 text-emerald-400">
+                  <span className="flex items-center gap-1 text-emerald-300">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                     {activeModelName}
                   </span>
                   {apiLatency !== null && (
-                    <span className="text-purple-300 font-mono text-[10px]">({apiLatency}ms)</span>
+                    <span className="text-sky-300 font-mono-acc text-[10px]">({apiLatency}ms)</span>
                   )}
                 </div>
               </div>
@@ -249,30 +252,30 @@ export default function AIChatbot({ onOpenEventDetail }: AIChatbotProps) {
               <button
                 onClick={() => setKeyModalOpen(true)}
                 title="Google Gemini Key Config"
-                className="p-1.5 rounded-lg text-xs transition-colors flex items-center gap-1 text-cyan-400 bg-cyan-500/10 border border-cyan-500/25"
+                className="p-1.5 rounded-lg text-xs transition-colors flex items-center gap-1 text-sky-300 bg-sky-500/10 border border-sky-500/25 hover:bg-sky-500/20"
               >
                 <Key className="w-3.5 h-3.5" />
-                <span className="text-[10px] font-mono hidden sm:inline">API Key</span>
+                <span className="text-[10px] font-mono-acc hidden sm:inline">Key</span>
               </button>
 
               <button
                 onClick={clearChat}
                 title="Clear Chat History"
-                className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+                className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700 transition-colors"
               >
                 <Trash2 className="w-4 h-4" />
               </button>
 
               <button
                 onClick={() => setIsExpanded(!isExpanded)}
-                className="hidden sm:block p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+                className="hidden sm:block p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700 transition-colors"
               >
                 {isExpanded ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
               </button>
 
               <button
                 onClick={() => setIsOpen(false)}
-                className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+                className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700 transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -281,34 +284,34 @@ export default function AIChatbot({ onOpenEventDetail }: AIChatbotProps) {
 
           {/* User Context Banner */}
           {user && (
-            <div className="px-4 py-1.5 bg-purple-950/40 border-b border-purple-500/20 text-[11px] text-purple-200 flex items-center justify-between">
+            <div className="px-4 py-1.5 bg-indigo-950/40 border-b border-indigo-500/20 text-[11px] text-indigo-200 flex items-center justify-between">
               <span className="truncate">
-                Calibrated for: <strong className="text-white">{user.name}</strong> ({user.department.split(' ')[0]} • {user.careerGoals[0]})
+                Context: <strong className="text-white">{user.name}</strong> ({user.department.split(' ')[0]} • {user.careerGoals[0]})
               </span>
-              <span className="text-emerald-400 font-mono text-[10px] flex-shrink-0">
-                Google Gemini Engine
+              <span className="text-sky-300 font-mono-acc text-[10px] flex-shrink-0">
+                2,000+ DB Events
               </span>
             </div>
           )}
 
           {/* Messages Container */}
           <div className="flex-1 overflow-y-auto p-4 space-y-4 text-xs">
-            {messages.map((msg) => {
+            {messages.map((msg, mIdx) => {
               const isUser = msg.sender === 'user';
               return (
                 <div key={msg.id} className={`flex gap-2.5 ${isUser ? 'justify-end' : 'justify-start'}`}>
                   {!isUser && (
-                    <div className="w-7 h-7 rounded-lg bg-purple-600/30 border border-purple-500/40 flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+                    <div className="w-7 h-7 rounded-lg bg-indigo-500/20 border border-indigo-400/30 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <Sparkles className="w-3.5 h-3.5 text-sky-400" />
                     </div>
                   )}
 
                   <div className={`max-w-[85%] space-y-2.5 ${isUser ? 'items-end' : 'items-start'}`}>
                     <div
-                      className={`p-3.5 rounded-2xl leading-relaxed whitespace-pre-line ${
+                      className={`p-3.5 rounded-2xl leading-relaxed whitespace-pre-line font-sans ${
                         isUser
-                          ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-tr-none shadow-md shadow-purple-950/40'
-                          : 'bg-slate-900/90 text-slate-200 border border-slate-800 rounded-tl-none shadow-md'
+                          ? 'bg-gradient-to-r from-indigo-500 to-sky-500 text-white rounded-tr-none shadow-md'
+                          : 'bg-slate-800/95 text-slate-100 border border-slate-700/80 rounded-tl-none shadow-sm'
                       }`}
                     >
                       {msg.text}
@@ -318,34 +321,32 @@ export default function AIChatbot({ onOpenEventDetail }: AIChatbotProps) {
                     {msg.suggestedEventIds && msg.suggestedEventIds.length > 0 && (
                       <div className="space-y-2 pt-1">
                         {msg.suggestedEventIds.map((eventId) => {
-                          const event = events.find(e => e.id === eventId);
+                          const event = events.find(e => e.id === eventId || e.slug === eventId);
                           if (!event) return null;
                           return (
                             <div
                               key={event.id}
-                              className="p-3 rounded-xl bg-slate-900/95 border border-purple-500/30 hover:border-cyan-400/60 transition-all flex items-center justify-between gap-3 text-left group"
+                              className="p-3 rounded-xl bg-slate-800 border border-slate-700 hover:border-sky-400/50 transition-all flex items-center justify-between gap-3 text-left group shadow-sm"
                             >
                               <div className="min-w-0">
                                 <div className="flex items-center gap-1.5 text-[10px]">
-                                  <span className="font-bold text-cyan-400">{event.type}</span>
+                                  <span className="font-bold text-sky-300">{event.type}</span>
                                   <span className="text-slate-400">• {event.mode}</span>
-                                  {event.featured && (
-                                    <span className="text-amber-300 font-bold">🏆 National Grand</span>
-                                  )}
+                                  <span className="text-emerald-300 font-semibold">{event.prizePool}</span>
                                 </div>
-                                <h4 className="text-xs font-bold text-white truncate mt-0.5 group-hover:text-cyan-300 transition-colors">
+                                <h4 className="text-xs font-bold text-white truncate mt-0.5 group-hover:text-sky-300 transition-colors">
                                   {event.title}
                                 </h4>
                                 <div className="text-[10px] text-slate-400 truncate mt-0.5">
-                                  {event.prizePool || event.location}
+                                  {event.location}
                                 </div>
                               </div>
 
                               <button
                                 onClick={() => onOpenEventDetail && onOpenEventDetail(event.id)}
-                                className="px-2.5 py-1.5 rounded-lg bg-purple-600/30 hover:bg-purple-600/50 text-purple-200 text-[11px] font-semibold border border-purple-500/30 flex-shrink-0 flex items-center gap-1 transition-colors"
+                                className="px-2.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-[11px] font-semibold flex-shrink-0 flex items-center gap-1 transition-colors shadow-sm"
                               >
-                                <span>View</span>
+                                <span>Explore</span>
                                 <ChevronRight className="w-3 h-3" />
                               </button>
                             </div>
@@ -354,47 +355,36 @@ export default function AIChatbot({ onOpenEventDetail }: AIChatbotProps) {
                       </div>
                     )}
 
-                    {/* Quick Reply Chips */}
-                    {msg.quickReplies && msg.quickReplies.length > 0 && (
+                    {/* Quick Replies */}
+                    {!isUser && msg.quickReplies && msg.quickReplies.length > 0 && (
                       <div className="flex flex-wrap gap-1.5 pt-1">
-                        {msg.quickReplies.map((reply, i) => (
+                        {msg.quickReplies.map((reply, rIdx) => (
                           <button
-                            key={i}
+                            key={rIdx}
                             onClick={() => handleSendMessage(reply)}
-                            className="text-[11px] px-2.5 py-1 rounded-xl bg-purple-500/10 hover:bg-purple-500/20 text-purple-300 border border-purple-500/30 transition-all text-left"
+                            className="px-2.5 py-1 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-sky-200 border border-slate-700 text-[11px] font-medium transition-colors"
                           >
-                            {reply} →
+                            {reply}
                           </button>
                         ))}
                       </div>
                     )}
-
-                    <span className="text-[9px] text-slate-500 block px-1">
-                      {msg.timestamp}
-                    </span>
                   </div>
-
-                  {isUser && (
-                    <div className="w-7 h-7 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <User className="w-3.5 h-3.5 text-slate-300" />
-                    </div>
-                  )}
                 </div>
               );
             })}
 
+            {/* Typing Indicator */}
             {isTyping && (
-              <div className="flex items-center gap-2 text-slate-400 text-xs py-2">
-                <div className="w-7 h-7 rounded-lg bg-purple-600/30 flex items-center justify-center">
-                  <Sparkles className="w-3.5 h-3.5 text-cyan-400 animate-spin" />
+              <div className="flex gap-2.5 justify-start items-center">
+                <div className="w-7 h-7 rounded-lg bg-indigo-500/20 border border-indigo-400/30 flex items-center justify-center flex-shrink-0">
+                  <Sparkles className="w-3.5 h-3.5 text-sky-400 animate-spin" />
                 </div>
-                <div className="flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-bounce" />
-                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-bounce [animation-delay:0.2s]" />
-                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-bounce [animation-delay:0.4s]" />
-                  <span className="text-[11px] text-slate-400 ml-1">
-                    Google Gemini is processing query...
-                  </span>
+                <div className="p-3 rounded-2xl bg-slate-800 text-slate-400 border border-slate-700 rounded-tl-none flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-bounce" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-bounce [animation-delay:0.2s]" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-bounce [animation-delay:0.4s]" />
+                  <span className="text-[11px] text-slate-400 ml-1.5">Gemini thinking...</span>
                 </div>
               </div>
             )}
@@ -402,108 +392,90 @@ export default function AIChatbot({ onOpenEventDetail }: AIChatbotProps) {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Input Form */}
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleSendMessage();
-            }}
-            className="p-3 border-t border-slate-800 bg-[#0d1222]/95 rounded-b-3xl"
-          >
-            <div className="flex items-center gap-2">
+          {/* Input Box */}
+          <div className="p-3 border-t border-slate-700 bg-[#182238]/95 rounded-b-3xl">
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSendMessage();
+              }}
+              className="flex items-center gap-2"
+            >
               <input
                 type="text"
+                placeholder="Ask about 2,000+ hackathons, code, prizes, tips..."
                 value={inputQuery}
                 onChange={(e) => setInputQuery(e.target.value)}
-                placeholder="Ask Gemini anything about hackathons, code, prizes..."
-                className="flex-1 px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-purple-500"
+                className="flex-1 px-3.5 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-sky-400 transition-colors font-sans"
               />
               <button
                 type="submit"
                 disabled={!inputQuery.trim() || isTyping}
-                className="p-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-cyan-500 hover:opacity-95 text-white disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-md shadow-purple-900/30"
+                className="p-2.5 rounded-xl bg-gradient-to-r from-indigo-500 to-sky-500 hover:from-indigo-400 hover:to-sky-400 disabled:opacity-50 text-white font-bold transition-all shadow-md"
               >
                 <Send className="w-4 h-4" />
               </button>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       )}
 
-      {/* Google Gemini API Key Modal */}
+      {/* Gemini API Key Config Modal */}
       {keyModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-150">
-          <div className="relative w-full max-w-md rounded-3xl glass-panel border border-cyan-500/40 p-6 shadow-2xl shadow-cyan-950/50 space-y-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+          <div className="relative w-full max-w-md p-6 rounded-3xl glass-panel border border-slate-700 shadow-2xl">
             <button
               onClick={() => setKeyModalOpen(false)}
-              className="absolute top-4 right-4 p-2 rounded-xl bg-slate-800 text-slate-400 hover:text-white"
+              className="absolute top-4 right-4 p-1.5 rounded-lg text-slate-400 hover:text-white"
             >
               <X className="w-4 h-4" />
             </button>
 
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-cyan-500/20 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
-                <Key className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="text-base font-bold text-white font-display">Google Gemini API Configuration</h3>
-                <p className="text-xs text-slate-400">Connected to Google Gemini 1.5 Flash</p>
-              </div>
+            <div className="flex items-center gap-2 text-white font-bold text-base font-display">
+              <Key className="w-5 h-5 text-sky-400" />
+              <span>Google Gemini API Key Config</span>
             </div>
 
-            <p className="text-xs text-slate-300 leading-relaxed">
-              Your server has a default Gemini key configured in <code className="text-cyan-300 font-mono">.env.local</code>. You can optionally paste a custom key below.
+            <p className="text-xs text-slate-300 mt-2 leading-relaxed font-sans">
+              Connect your Google Gemini API key to query all 2,000+ database events with live LLM intelligence.
             </p>
 
-            <div>
-              <label className="text-xs text-slate-300 font-semibold block mb-1">Custom Gemini API Key</label>
+            <div className="mt-4 space-y-2">
               <input
                 type="password"
                 placeholder="AIzaSy..."
                 value={tempKeyInput}
                 onChange={(e) => setTempKeyInput(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 font-mono"
+                className="w-full px-3.5 py-2 rounded-xl bg-slate-800 border border-slate-700 text-xs text-white font-mono placeholder-slate-500 focus:outline-none focus:border-sky-400"
               />
             </div>
 
-            {keySavedToast && (
-              <div className="p-2.5 rounded-xl bg-emerald-950/60 border border-emerald-500/40 text-emerald-300 text-xs flex items-center gap-2">
-                <Check className="w-4 h-4 text-emerald-400" />
-                <span>Gemini API Key updated successfully!</span>
-              </div>
-            )}
-
-            <div className="flex items-center justify-between pt-2">
+            <div className="mt-4 flex items-center justify-between gap-2">
               <a
                 href="https://aistudio.google.com/app/apikey"
                 target="_blank"
                 rel="noreferrer"
-                className="text-xs text-cyan-400 hover:text-cyan-300 flex items-center gap-1"
+                className="text-xs text-sky-400 hover:underline flex items-center gap-1 font-semibold"
               >
                 <span>Get Free Gemini Key</span>
                 <ExternalLink className="w-3 h-3" />
               </a>
 
-              <div className="flex gap-2">
+              <div className="flex items-center gap-2">
                 <button
-                  type="button"
-                  onClick={() => {
-                    setTempKeyInput('');
-                    saveGeminiKey('');
-                  }}
-                  className="px-3 py-1.5 rounded-xl bg-slate-800 text-slate-400 hover:text-white text-xs font-semibold"
-                >
-                  Reset Default
-                </button>
-                <button
-                  type="button"
                   onClick={() => saveGeminiKey(tempKeyInput)}
-                  className="px-4 py-1.5 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 text-white text-xs font-bold shadow-md"
+                  className="px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-500 to-sky-500 text-white font-bold text-xs shadow-md"
                 >
-                  Save & Connect
+                  Save Key
                 </button>
               </div>
             </div>
+
+            {keySavedToast && (
+              <div className="mt-3 p-2 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs text-center font-bold">
+                ✓ Gemini Key configured successfully!
+              </div>
+            )}
           </div>
         </div>
       )}

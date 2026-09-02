@@ -16,6 +16,7 @@ export type DifficultyLevel = 'Beginner' | 'Intermediate' | 'Advanced' | 'Elite 
 
 export interface EventItem {
   id: string;
+  slug?: string;
   title: string;
   organizer: {
     name: string;
