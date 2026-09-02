@@ -27,6 +27,7 @@ export interface EventItem {
   category: EventCategory;
   mode: EventMode;
   location: string;
+  city?: string;
   startDate: string;
   endDate: string;
   duration: string;

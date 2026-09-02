@@ -12,7 +12,9 @@ import {
   Search, 
   ArrowRight, 
   Bot, 
-  ChevronDown
+  ChevronDown,
+  X,
+  Filter
 } from 'lucide-react';
 
 export default function HomePage() {
@@ -51,22 +53,50 @@ export default function HomePage() {
 
   const modes = ['All', 'Offline', 'Virtual', 'Hybrid'];
 
-  // Filter recommendations
-  const filteredRecommendations = rankedRecommendations.filter(({ event }) => {
-    const q = (searchQuery || '').toLowerCase();
-    const title = (event?.title || '').toLowerCase();
-    const desc = (event?.description || '').toLowerCase();
-    const orgName = (event?.organizer?.name || '').toLowerCase();
-    const loc = (event?.location || (event as any)?.locationVenue || '').toLowerCase();
-    const skills = event?.requiredSkills || [];
+  const quickSearchTags = [
+    'Hackathon',
+    'Bengaluru',
+    'Hyderabad',
+    'Chennai',
+    'Mumbai',
+    'Delhi NCR',
+    'Python',
+    'Generative AI',
+    'Web3',
+    'Cybersecurity',
+    'IIT',
+    'Workshop'
+  ];
 
-    const matchesSearch = 
-      !q ||
-      title.includes(q) ||
-      desc.includes(q) ||
-      orgName.includes(q) ||
-      loc.includes(q) ||
-      skills.some(s => (s || '').toLowerCase().includes(q));
+  // Universal Multi-Keyword Full-Text Search
+  const searchTokens = searchQuery.toLowerCase().trim().split(/\s+/).filter(Boolean);
+
+  const filteredRecommendations = rankedRecommendations.filter(({ event }) => {
+    // Compile a comprehensive searchable string of all event attributes
+    const searchableCorpus = [
+      event?.title || '',
+      event?.description || '',
+      event?.shortSummary || '',
+      event?.category || '',
+      event?.type || '',
+      event?.mode || '',
+      event?.city || '',
+      event?.location || (event as any)?.locationVenue || '',
+      event?.organizer?.name || '',
+      event?.organizer?.college || '',
+      event?.difficulty || '',
+      event?.prizePool || '',
+      ...(event?.requiredSkills || []),
+      ...(event?.skillsGained || []),
+      ...(event?.targetAudience || []),
+      ...(event?.careerRelevance || []),
+      ...(event?.perks || []),
+      ...(event?.eligibility || []),
+      ...((event?.mentors || []).map((m: any) => `${m?.name || ''} ${m?.role || ''} ${m?.company || ''}`)),
+    ].join(' ').toLowerCase();
+
+    // Every token must match somewhere in the corpus
+    const matchesSearch = searchTokens.length === 0 || searchTokens.every(token => searchableCorpus.includes(token));
 
     const matchesCategory = selectedCategory === 'All' || event?.category === selectedCategory;
     const matchesMode = selectedMode === 'All' || event?.mode === selectedMode;
@@ -198,37 +228,86 @@ export default function HomePage() {
               </span>
             </h2>
             <p className="text-xs text-slate-400 mt-0.5">
-              Ranked in real-time by the AI matching engine for {user ? <strong className="text-slate-200">{user.name}</strong> : 'you'}.
+              Search by any skill, city, college, organizer, topic, or role across all 2,000+ opportunities.
             </p>
           </div>
 
           {/* Search Bar & Sort Dropdown */}
           <div className="flex items-center gap-2">
-            <div className="relative flex-1 sm:w-60">
-              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <div className="relative flex-1 sm:w-80">
+              <Search className="w-4 h-4 text-sky-400 absolute left-3 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
-                placeholder="Search city, skill, hackathon..."
+                placeholder="Search by city, skill, college, hackathon, role..."
                 value={searchQuery}
                 onChange={(e) => {
                   setSearchQuery(e.target.value);
                   setVisibleCount(24);
                 }}
-                className="w-full pl-9 pr-3.5 py-2 rounded-xl bg-slate-800/90 border border-slate-700 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-sky-400 transition-colors"
+                className="w-full pl-9 pr-8 py-2.5 rounded-xl bg-slate-800/90 border border-slate-700 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400 transition-all font-sans"
               />
+              {searchQuery && (
+                <button
+                  onClick={() => {
+                    setSearchQuery('');
+                    setVisibleCount(24);
+                  }}
+                  title="Clear search"
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 rounded-md text-slate-400 hover:text-white hover:bg-slate-700 transition-colors"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
             </div>
 
             <select
               value={sortBy}
               onChange={(e: any) => setSortBy(e.target.value)}
               aria-label="Sort opportunities by"
-              className="px-3 py-2 rounded-xl bg-slate-800/90 border border-slate-700 text-xs text-slate-300 focus:outline-none focus:border-sky-400 transition-colors font-medium"
+              className="px-3 py-2.5 rounded-xl bg-slate-800/90 border border-slate-700 text-xs text-slate-300 focus:outline-none focus:border-sky-400 transition-colors font-medium"
             >
               <option value="match">Sort by AI Match</option>
               <option value="trust">Sort by Trust Score</option>
               <option value="date">Sort by Date</option>
             </select>
           </div>
+        </div>
+
+        {/* Quick Search Suggestions Pills */}
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none text-[11px] text-slate-400">
+          <span className="font-semibold text-slate-400 flex items-center gap-1 flex-shrink-0">
+            <Filter className="w-3 h-3 text-sky-400" /> Popular:
+          </span>
+          {quickSearchTags.map(tag => (
+            <button
+              key={tag}
+              onClick={() => {
+                setSearchQuery(tag);
+                setSelectedCategory('All');
+                setVisibleCount(24);
+              }}
+              className={`px-2.5 py-0.5 rounded-full border transition-all flex-shrink-0 ${
+                searchQuery.toLowerCase() === tag.toLowerCase()
+                  ? 'bg-sky-500/20 text-sky-200 border-sky-400/50 font-bold'
+                  : 'bg-slate-800/80 text-slate-300 border-slate-700 hover:text-white hover:bg-slate-700'
+              }`}
+            >
+              {tag}
+            </button>
+          ))}
+          {searchQuery && (
+            <button
+              onClick={() => {
+                setSearchQuery('');
+                setSelectedCategory('All');
+                setSelectedMode('All');
+                setVisibleCount(24);
+              }}
+              className="text-rose-400 hover:underline font-semibold ml-1 flex-shrink-0"
+            >
+              Clear All
+            </button>
+          )}
         </div>
 
         {/* Stylish Mild Category Filter Pills */}
@@ -319,8 +398,8 @@ export default function HomePage() {
       {filteredRecommendations.length === 0 && (
         <div className="p-12 rounded-2xl glass-panel border border-slate-700 text-center space-y-3">
           <Sparkles className="w-7 h-7 text-slate-400 mx-auto" />
-          <h3 className="text-sm font-bold text-white font-display">No matching events found</h3>
-          <p className="text-xs text-slate-300">Try resetting category, city, or search keywords to discover more opportunities.</p>
+          <h3 className="text-sm font-bold text-white font-display">No matching events found for &quot;{searchQuery}&quot;</h3>
+          <p className="text-xs text-slate-300">Try searching for keywords like &quot;Python&quot;, &quot;Bengaluru&quot;, &quot;Hackathon&quot;, or &quot;Web3&quot;.</p>
           <button
             onClick={() => {
               setSelectedCategory('All');
