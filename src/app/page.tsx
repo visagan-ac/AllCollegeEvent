@@ -340,19 +340,53 @@ export default function HomePage() {
       )}
 
       {/* AI Explainer Modal */}
-      {explainingRecommendation && user && (
+      {explainingRecommendation && (
         <AIExplainerModal
           recommendation={explainingRecommendation}
-          student={user}
+          student={user || {
+            id: 'guest',
+            name: 'Guest Innovator',
+            avatar: '',
+            email: '',
+            college: 'Collegiate Campus',
+            department: 'Computer Science & Engineering',
+            yearOfStudy: 3,
+            cgpa: 8.5,
+            location: 'India',
+            skills: [],
+            interests: [],
+            careerGoals: ['Software Engineer'],
+            preferredMode: 'All',
+            previousEvents: [],
+            bookmarkedEventIds: [],
+            registeredEventIds: []
+          }}
           onClose={() => setExplainingRecommendation(null)}
         />
       )}
 
       {/* Event Detail Modal */}
-      {detailedRecommendation && user && (
+      {detailedRecommendation && (
         <EventDetailModal
           event={detailedRecommendation.event}
-          student={user}
+          student={user || {
+            id: 'guest',
+            name: 'Collegiate Innovator',
+            avatar: '',
+            email: '',
+            college: 'Collegiate Campus',
+            department: 'Computer Science & Engineering',
+            yearOfStudy: 3,
+            cgpa: 8.5,
+            location: 'India',
+            skills: [],
+            interests: [],
+            careerGoals: ['Software Engineer'],
+            preferredMode: 'All',
+            previousEvents: [],
+            bookmarkedEventIds: [],
+            registeredEventIds: []
+          }}
           matchScore={detailedRecommendation.matchScore}
           onClose={() => setDetailedRecommendation(null)}
           onOpenExplainer={() => {

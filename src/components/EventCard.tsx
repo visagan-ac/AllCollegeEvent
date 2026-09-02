@@ -89,19 +89,19 @@ export default function EventCard({ recommendation, student, onOpenDetail, onOpe
           </h3>
 
           <div className="flex items-center gap-1.5 mt-1.5 text-xs text-slate-400">
-            <span className="text-slate-300 font-medium">{event.organizer.name}</span>
-            {event.organizer.verified && (
+            <span className="text-slate-300 font-medium">{event?.organizer?.name || 'College Partner'}</span>
+            {event?.organizer?.verified && (
               <span title="Verified Organizer" className="inline-flex items-center">
                 <ShieldCheck className="w-3.5 h-3.5 text-cyan-400 flex-shrink-0" />
               </span>
             )}
-            <span>• {event.organizer.college.split(' ')[0]}</span>
+            <span>• {(event?.organizer?.college || 'Campus').split(' ')[0]}</span>
           </div>
         </div>
 
         {/* Summary */}
         <p className="text-xs text-slate-300/90 mt-2.5 line-clamp-2 leading-relaxed">
-          {event.shortSummary}
+          {event?.shortSummary || event?.description || ''}
         </p>
 
         {/* AI Career Bridge Trajectory Insight Tag */}
@@ -116,11 +116,11 @@ export default function EventCard({ recommendation, student, onOpenDetail, onOpe
         <div className="mt-3.5 grid grid-cols-2 gap-2 text-[11px] text-slate-300">
           <div className="flex items-center gap-1.5">
             <Calendar className="w-3.5 h-3.5 text-cyan-400" />
-            <span className="truncate">{event.startDate} ({event.duration.split(' ')[0]} d)</span>
+            <span className="truncate">{event?.startDate || '2026'} ({(event?.duration || '36 Hours').split(' ')[0]})</span>
           </div>
           <div className="flex items-center gap-1.5">
             <MapPin className="w-3.5 h-3.5 text-rose-400" />
-            <span className="truncate">{(event.location || (event as any).locationVenue || 'Hybrid / Online').split(',')[0]}</span>
+            <span className="truncate">{(event?.location || (event as any)?.locationVenue || 'Hybrid / Online').split(',')[0]}</span>
           </div>
         </div>
 
