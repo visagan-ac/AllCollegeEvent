@@ -100,42 +100,50 @@ export function scoreEventByKeywords(event: EventItem, keywords: string[]): {
   const matchedSet = new Set<string>();
   let totalScore = 0;
 
+  const cityTokens = ['bengaluru', 'bangalore', 'chennai', 'mumbai', 'hyderabad', 'delhi', 'pune', 'kolkata', 'kochi', 'vellore'];
+
   keywords.forEach(keyword => {
     let kwMatched = false;
 
-    // Weight 1: Title & Category (High Value)
+    // Weight 1: Exact City Match (Highest Priority)
+    if (cityTokens.includes(keyword) && eventAttributes.location.includes(keyword)) {
+      totalScore += 15;
+      kwMatched = true;
+    }
+
+    // Weight 2: Title & Category
     if (eventAttributes.title.includes(keyword) || eventAttributes.category.includes(keyword)) {
+      totalScore += 8;
+      kwMatched = true;
+    }
+
+    // Weight 3: Required & Gained Skills
+    if (eventAttributes.requiredSkills.some(s => s.includes(keyword)) || eventAttributes.skillsGained.some(s => s.includes(keyword))) {
+      totalScore += 7;
+      kwMatched = true;
+    }
+
+    // Weight 4: General Venue & Location
+    if (!cityTokens.includes(keyword) && eventAttributes.location.includes(keyword)) {
       totalScore += 5;
       kwMatched = true;
     }
 
-    // Weight 2: Required & Gained Skills
-    if (eventAttributes.requiredSkills.some(s => s.includes(keyword)) || eventAttributes.skillsGained.some(s => s.includes(keyword))) {
-      totalScore += 4;
-      kwMatched = true;
-    }
-
-    // Weight 3: City, Venue & Location
-    if (eventAttributes.location.includes(keyword)) {
-      totalScore += 4;
-      kwMatched = true;
-    }
-
-    // Weight 4: Event Type (Hackathon, Workshop, Competition) & Mode (Offline, Virtual)
+    // Weight 5: Event Type (Hackathon, Workshop, Competition) & Mode (Offline, Virtual)
     if (eventAttributes.type.includes(keyword) || eventAttributes.mode.includes(keyword)) {
-      totalScore += 3;
+      totalScore += 5;
       kwMatched = true;
     }
 
-    // Weight 5: Prizes & Perks
+    // Weight 6: Prizes & Perks
     if (eventAttributes.prizePool.includes(keyword) || eventAttributes.perks.some(p => p.includes(keyword))) {
-      totalScore += 3;
+      totalScore += 4;
       kwMatched = true;
     }
 
-    // Weight 6: Description & Career Relevance
+    // Weight 7: Description & Career Relevance
     if (eventAttributes.description.includes(keyword) || eventAttributes.shortSummary.includes(keyword) || eventAttributes.careerRelevance.some(c => c.includes(keyword))) {
-      totalScore += 2;
+      totalScore += 3;
       kwMatched = true;
     }
 
