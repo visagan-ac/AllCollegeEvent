@@ -6,7 +6,11 @@ export type EventCategory =
   | 'Data Science & Analytics'
   | 'Robotics & IoT'
   | 'Mobile & App Dev'
-  | 'Competitive Coding';
+  | 'Competitive Coding'
+  | 'AR/VR & Game Dev'
+  | 'FinTech & Algorithmic Trading'
+  | 'BioTech & Computational Health'
+  | 'CleanTech & Sustainable Smart Grid';
 
 export type EventType = 'Hackathon' | 'Workshop' | 'Conference' | 'Internship' | 'Competition' | 'Bootcamp';
 

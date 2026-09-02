@@ -15,7 +15,8 @@ import {
   ChevronDown,
   X,
   Filter,
-  CornerDownLeft
+  CornerDownLeft,
+  CheckCircle2
 } from 'lucide-react';
 
 export default function HomePage() {
@@ -73,13 +74,15 @@ export default function HomePage() {
   // Execute search on Enter key or Search button click
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setSearchQuery(searchInput);
+    setSearchQuery(searchInput.trim());
     setVisibleCount(24);
   };
 
   const handleClearSearch = () => {
     setSearchInput('');
     setSearchQuery('');
+    setSelectedCategory('All');
+    setSelectedMode('All');
     setVisibleCount(24);
   };
 
@@ -90,8 +93,9 @@ export default function HomePage() {
     setVisibleCount(24);
   };
 
-  // Universal Multi-Keyword Full-Text Search
-  const searchTokens = searchQuery.toLowerCase().trim().split(/\s+/).filter(Boolean);
+  // Universal Multi-Keyword Full-Text & Synonym Search Engine
+  const activeQuery = (searchQuery || searchInput).toLowerCase().trim();
+  const searchTokens = activeQuery.split(/\s+/).filter(Boolean);
 
   const filteredRecommendations = rankedRecommendations.filter(({ event }) => {
     // Compile a comprehensive searchable string of all event attributes
@@ -117,8 +121,23 @@ export default function HomePage() {
       ...((event?.mentors || []).map((m: any) => `${m?.name || ''} ${m?.role || ''} ${m?.company || ''}`)),
     ].join(' ').toLowerCase();
 
-    // Every token must match somewhere in the corpus
-    const matchesSearch = searchTokens.length === 0 || searchTokens.every(token => searchableCorpus.includes(token));
+    // Every token must match somewhere in the corpus (with synonym expansion)
+    const matchesSearch = searchTokens.length === 0 || searchTokens.every(token => {
+      if (searchableCorpus.includes(token)) return true;
+      if (token === 'ai' && (searchableCorpus.includes('artificial intelligence') || searchableCorpus.includes('machine learning') || searchableCorpus.includes('neural') || searchableCorpus.includes('deep learning'))) return true;
+      if (token === 'ml' && (searchableCorpus.includes('machine learning') || searchableCorpus.includes('deep learning') || searchableCorpus.includes('data science'))) return true;
+      if (token === 'web3' && (searchableCorpus.includes('blockchain') || searchableCorpus.includes('solidity') || searchableCorpus.includes('crypto') || searchableCorpus.includes('ethereum') || searchableCorpus.includes('defi'))) return true;
+      if (token === 'crypto' && (searchableCorpus.includes('web3') || searchableCorpus.includes('blockchain') || searchableCorpus.includes('solidity'))) return true;
+      if (token === 'bangalore' && (searchableCorpus.includes('bengaluru') || searchableCorpus.includes('karnataka'))) return true;
+      if (token === 'bengaluru' && (searchableCorpus.includes('bangalore') || searchableCorpus.includes('karnataka'))) return true;
+      if (token === 'chennai' && (searchableCorpus.includes('madras') || searchableCorpus.includes('tamil nadu'))) return true;
+      if (token === 'mumbai' && (searchableCorpus.includes('bombay') || searchableCorpus.includes('maharashtra'))) return true;
+      if (token === 'offline' && (event?.mode === 'Offline' || event?.mode === 'Hybrid')) return true;
+      if (token === 'virtual' && (event?.mode === 'Virtual' || event?.mode === 'Hybrid')) return true;
+      if (token === 'online' && (event?.mode === 'Virtual' || event?.mode === 'Hybrid')) return true;
+      if (token === 'hack' && searchableCorpus.includes('hackathon')) return true;
+      return false;
+    });
 
     const matchesCategory = selectedCategory === 'All' || event?.category === selectedCategory;
     const matchesMode = selectedMode === 'All' || event?.mode === selectedMode;
@@ -316,7 +335,7 @@ export default function HomePage() {
               type="button"
               onClick={() => handleQuickTagClick(tag)}
               className={`px-2.5 py-0.5 rounded-full border transition-all flex-shrink-0 ${
-                searchQuery.toLowerCase() === tag.toLowerCase()
+                (searchQuery || searchInput).toLowerCase() === tag.toLowerCase()
                   ? 'bg-sky-500/20 text-sky-200 border-sky-400/50 font-bold'
                   : 'bg-slate-800/80 text-slate-300 border-slate-700 hover:text-white hover:bg-slate-700'
               }`}
@@ -324,13 +343,13 @@ export default function HomePage() {
               {tag}
             </button>
           ))}
-          {searchQuery && (
+          {(searchQuery || searchInput) && (
             <button
               type="button"
               onClick={handleClearSearch}
               className="text-rose-400 hover:underline font-semibold ml-1 flex-shrink-0"
             >
-              Clear Search ({searchQuery})
+              Clear Search ({searchQuery || searchInput})
             </button>
           )}
         </div>
@@ -423,7 +442,7 @@ export default function HomePage() {
       {filteredRecommendations.length === 0 && (
         <div className="p-12 rounded-2xl glass-panel border border-slate-700 text-center space-y-3">
           <Sparkles className="w-7 h-7 text-slate-400 mx-auto" />
-          <h3 className="text-sm font-bold text-white font-display">No matching events found for &quot;{searchQuery}&quot;</h3>
+          <h3 className="text-sm font-bold text-white font-display">No matching events found for &quot;{searchQuery || searchInput}&quot;</h3>
           <p className="text-xs text-slate-300">Try searching for keywords like &quot;Python&quot;, &quot;Bengaluru&quot;, &quot;Hackathon&quot;, or &quot;Web3&quot;.</p>
           <button
             onClick={handleClearSearch}
