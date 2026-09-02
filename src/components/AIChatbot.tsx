@@ -8,16 +8,13 @@ import {
   X, 
   Send, 
   Bot, 
-  User, 
   ChevronRight, 
   Maximize2, 
   Minimize2, 
   Trash2, 
-  Key, 
-  Check, 
-  ExternalLink,
-  ShieldCheck,
   Copy,
+  Check,
+  Zap,
   Code
 } from 'lucide-react';
 
@@ -32,67 +29,19 @@ export default function AIChatbot({ onOpenEventDetail }: AIChatbotProps) {
   const [inputQuery, setInputQuery] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [apiLatency, setApiLatency] = useState<number | null>(null);
-  const [activeModelName, setActiveModelName] = useState<string>('Google Gemini 1.5 Flash');
-  const [isServerGeminiActive, setIsServerGeminiActive] = useState<boolean>(true);
-  const [copiedCodeIndex, setCopiedCodeIndex] = useState<string | null>(null);
-
-  // Gemini API Key State for optional manual override
-  const [geminiApiKey, setGeminiApiKey] = useState<string>('');
-  const [keyModalOpen, setKeyModalOpen] = useState<boolean>(false);
-  const [tempKeyInput, setTempKeyInput] = useState<string>('');
-  const [keySavedToast, setKeySavedToast] = useState<boolean>(false);
-
-  // Check server Gemini status on mount
-  useEffect(() => {
-    fetch('/api/chat')
-      .then(res => res.json())
-      .then(data => {
-        if (data.geminiConfigured) {
-          setIsServerGeminiActive(true);
-          setActiveModelName('Google Gemini 1.5 Flash');
-        }
-      })
-      .catch(() => {});
-
-    try {
-      const savedKey = localStorage.getItem('gemini_api_key');
-      if (savedKey) {
-        setGeminiApiKey(savedKey);
-        setTempKeyInput(savedKey);
-        setActiveModelName('Google Gemini 1.5 Flash');
-      }
-    } catch (e) {}
-  }, []);
-
-  const saveGeminiKey = (key: string) => {
-    const trimmed = key.trim();
-    if (trimmed) {
-      localStorage.setItem('gemini_api_key', trimmed);
-      setGeminiApiKey(trimmed);
-      setActiveModelName('Google Gemini 1.5 Flash');
-    } else {
-      localStorage.removeItem('gemini_api_key');
-      setGeminiApiKey('');
-      setActiveModelName(isServerGeminiActive ? 'Google Gemini 1.5 Flash' : 'AllCollegeEvent AI');
-    }
-    setKeySavedToast(true);
-    setTimeout(() => {
-      setKeySavedToast(false);
-      setKeyModalOpen(false);
-    }, 1200);
-  };
+  const [copiedId, setCopiedId] = useState<string | null>(null);
 
   const initialWelcomeMessage: ChatMessage = {
     id: 'welcome',
     sender: 'ai',
-    text: `👋 Hi **${user?.name ? user.name.split(' ')[0] : 'Innovator'}**! I am your **AllCollegeEvent AI Copilot**.\n\n⚡ **Powered by Google Gemini 1.5 Flash & Neon PostgreSQL (2,000+ live events)**\n\nI can:\n• Find top hackathons matching your **${user?.careerGoals[0] || 'Target Career'}**\n• Explain rules, team formation, and cash prize breakdowns\n• Generate technical architectures and starter code templates (FastAPI, PyTorch, React, Solidity)\n• Analyze your skill gaps and suggest roadmaps\n\nWhat would you like to explore today?`,
+    text: `👋 Hi **${user?.name ? user.name.split(' ')[0] : 'Innovator'}**! I am your **AllCollegeEvent Native AI Copilot (v3.0)**.\n\n⚡ **Powered by our In-House Cognitive Model & Neon PostgreSQL (2,000+ opportunities)**\n\nI can:\n• 🔍 Find top hackathons matching your **${user?.careerGoals?.[0] || 'Target Career'}** across Bengaluru, Chennai, Hyderabad, Mumbai, and Delhi\n• 💻 Generate production-ready code templates (FastAPI, PyTorch, React, Solidity, Docker)\n• 🏆 Share hackathon winning formulas, pitch deck templates & judging criteria\n• 🗺️ Provide custom career roadmaps and skill gap roadmaps\n\nWhat would you like to explore today?`,
     timestamp: 'Just now',
     suggestedEventIds: ['allcollege-grand-hackathon-2026'],
     quickReplies: [
       'Top hackathons with cash prizes',
-      'Give me an AI project idea',
-      'FastAPI starter code',
-      'How to win a hackathon?'
+      'FastAPI AI Starter Code',
+      'How to win a hackathon?',
+      'Show Bengaluru events'
     ]
   };
 
@@ -129,15 +78,11 @@ export default function AIChatbot({ onOpenEventDetail }: AIChatbotProps) {
       
       const response = await fetch('/api/chat', {
         method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          ...(geminiApiKey ? { 'x-gemini-api-key': geminiApiKey } : {})
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           query,
           user: user || null,
           history: messages.slice(-4),
-          geminiApiKey: geminiApiKey || undefined
         })
       });
 
@@ -145,13 +90,10 @@ export default function AIChatbot({ onOpenEventDetail }: AIChatbotProps) {
       setApiLatency(elapsed);
 
       if (!response.ok) {
-        throw new Error('API returned an error');
+        throw new Error('API error');
       }
 
       const data = await response.json();
-      if (data.meta?.model) {
-        setActiveModelName(data.meta.model);
-      }
 
       const aiMsg: ChatMessage = {
         id: `ai-${Date.now()}`,
@@ -164,14 +106,14 @@ export default function AIChatbot({ onOpenEventDetail }: AIChatbotProps) {
 
       setMessages(prev => [...prev, aiMsg]);
     } catch (err) {
-      console.error('Chat API Error:', err);
+      console.error('Native AI Error:', err);
       const fallbackMsg: ChatMessage = {
         id: `ai-${Date.now()}`,
         sender: 'ai',
-        text: `✨ I analyzed your question regarding "${query}". Check out our **2,000+ live opportunities** in the feed for high-prize hackathons, workshops, and student summits!`,
+        text: `✨ I processed your inquiry for "${query}". Check out our **2,000+ collegiate opportunities** in the feed for upcoming hackathons, cash prizes, and student summits!`,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         suggestedEventIds: events.slice(0, 2).map(e => e.id),
-        quickReplies: ['Show AI Hackathons', 'Offline events', 'Give me starter code']
+        quickReplies: ['Show AI Hackathons', 'FastAPI starter code', 'How to win a hackathon?']
       };
       setMessages(prev => [...prev, fallbackMsg]);
     } finally {
@@ -179,10 +121,10 @@ export default function AIChatbot({ onOpenEventDetail }: AIChatbotProps) {
     }
   };
 
-  const copyToClipboard = (code: string, id: string) => {
-    navigator.clipboard.writeText(code);
-    setCopiedCodeIndex(id);
-    setTimeout(() => setCopiedCodeIndex(null), 1500);
+  const copyText = (text: string, id: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 1500);
   };
 
   const clearChat = () => {
@@ -205,7 +147,7 @@ export default function AIChatbot({ onOpenEventDetail }: AIChatbotProps) {
           <div className="flex flex-col text-left">
             <span>AI Copilot</span>
             <span className="text-[10px] text-sky-100 font-mono-acc font-normal">
-              ⚡ Gemini Live
+              ⚡ Native Engine v3.0
             </span>
           </div>
         </button>
@@ -230,15 +172,15 @@ export default function AIChatbot({ onOpenEventDetail }: AIChatbotProps) {
               </div>
               <div>
                 <div className="flex items-center gap-1.5">
-                  <span className="text-sm font-bold text-white font-display">AI Event Copilot</span>
+                  <span className="text-sm font-bold text-white font-display">AllCollegeEvent AI</span>
                   <span className="text-[10px] px-1.5 py-0.2 rounded bg-sky-500/15 text-sky-300 font-mono-acc font-semibold">
-                    Gemini 1.5
+                    v3.0 Native
                   </span>
                 </div>
                 <div className="flex items-center gap-2 text-[11px] text-slate-400">
                   <span className="flex items-center gap-1 text-emerald-300">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                    {activeModelName}
+                    Proprietary Model Active
                   </span>
                   {apiLatency !== null && (
                     <span className="text-sky-300 font-mono-acc text-[10px]">({apiLatency}ms)</span>
@@ -248,16 +190,6 @@ export default function AIChatbot({ onOpenEventDetail }: AIChatbotProps) {
             </div>
 
             <div className="flex items-center gap-1">
-              {/* Gemini Key Config Button */}
-              <button
-                onClick={() => setKeyModalOpen(true)}
-                title="Google Gemini Key Config"
-                className="p-1.5 rounded-lg text-xs transition-colors flex items-center gap-1 text-sky-300 bg-sky-500/10 border border-sky-500/25 hover:bg-sky-500/20"
-              >
-                <Key className="w-3.5 h-3.5" />
-                <span className="text-[10px] font-mono-acc hidden sm:inline">Key</span>
-              </button>
-
               <button
                 onClick={clearChat}
                 title="Clear Chat History"
@@ -286,7 +218,7 @@ export default function AIChatbot({ onOpenEventDetail }: AIChatbotProps) {
           {user && (
             <div className="px-4 py-1.5 bg-indigo-950/40 border-b border-indigo-500/20 text-[11px] text-indigo-200 flex items-center justify-between">
               <span className="truncate">
-                Context: <strong className="text-white">{user.name}</strong> ({user.department.split(' ')[0]} • {user.careerGoals[0]})
+                Calibrated for: <strong className="text-white">{user.name}</strong> ({user.department.split(' ')[0]} • {user.careerGoals[0]})
               </span>
               <span className="text-sky-300 font-mono-acc text-[10px] flex-shrink-0">
                 2,000+ DB Events
@@ -321,7 +253,7 @@ export default function AIChatbot({ onOpenEventDetail }: AIChatbotProps) {
                     {msg.suggestedEventIds && msg.suggestedEventIds.length > 0 && (
                       <div className="space-y-2 pt-1">
                         {msg.suggestedEventIds.map((eventId) => {
-                          const event = events.find(e => e.id === eventId || e.slug === eventId);
+                          const event = events.find(e => e.id === eventId || (e as any).slug === eventId);
                           if (!event) return null;
                           return (
                             <div
@@ -384,7 +316,7 @@ export default function AIChatbot({ onOpenEventDetail }: AIChatbotProps) {
                   <span className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-bounce" />
                   <span className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-bounce [animation-delay:0.2s]" />
                   <span className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-bounce [animation-delay:0.4s]" />
-                  <span className="text-[11px] text-slate-400 ml-1.5">Gemini thinking...</span>
+                  <span className="text-[11px] text-slate-400 ml-1.5">Synthesizing response...</span>
                 </div>
               </div>
             )}
@@ -403,7 +335,7 @@ export default function AIChatbot({ onOpenEventDetail }: AIChatbotProps) {
             >
               <input
                 type="text"
-                placeholder="Ask about 2,000+ hackathons, code, prizes, tips..."
+                placeholder="Ask for code, hackathons, pitch playbooks, prizes..."
                 value={inputQuery}
                 onChange={(e) => setInputQuery(e.target.value)}
                 className="flex-1 px-3.5 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-sky-400 transition-colors font-sans"
@@ -416,66 +348,6 @@ export default function AIChatbot({ onOpenEventDetail }: AIChatbotProps) {
                 <Send className="w-4 h-4" />
               </button>
             </form>
-          </div>
-        </div>
-      )}
-
-      {/* Gemini API Key Config Modal */}
-      {keyModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-          <div className="relative w-full max-w-md p-6 rounded-3xl glass-panel border border-slate-700 shadow-2xl">
-            <button
-              onClick={() => setKeyModalOpen(false)}
-              className="absolute top-4 right-4 p-1.5 rounded-lg text-slate-400 hover:text-white"
-            >
-              <X className="w-4 h-4" />
-            </button>
-
-            <div className="flex items-center gap-2 text-white font-bold text-base font-display">
-              <Key className="w-5 h-5 text-sky-400" />
-              <span>Google Gemini API Key Config</span>
-            </div>
-
-            <p className="text-xs text-slate-300 mt-2 leading-relaxed font-sans">
-              Connect your Google Gemini API key to query all 2,000+ database events with live LLM intelligence.
-            </p>
-
-            <div className="mt-4 space-y-2">
-              <input
-                type="password"
-                placeholder="AIzaSy..."
-                value={tempKeyInput}
-                onChange={(e) => setTempKeyInput(e.target.value)}
-                className="w-full px-3.5 py-2 rounded-xl bg-slate-800 border border-slate-700 text-xs text-white font-mono placeholder-slate-500 focus:outline-none focus:border-sky-400"
-              />
-            </div>
-
-            <div className="mt-4 flex items-center justify-between gap-2">
-              <a
-                href="https://aistudio.google.com/app/apikey"
-                target="_blank"
-                rel="noreferrer"
-                className="text-xs text-sky-400 hover:underline flex items-center gap-1 font-semibold"
-              >
-                <span>Get Free Gemini Key</span>
-                <ExternalLink className="w-3 h-3" />
-              </a>
-
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => saveGeminiKey(tempKeyInput)}
-                  className="px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-500 to-sky-500 text-white font-bold text-xs shadow-md"
-                >
-                  Save Key
-                </button>
-              </div>
-            </div>
-
-            {keySavedToast && (
-              <div className="mt-3 p-2 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs text-center font-bold">
-                ✓ Gemini Key configured successfully!
-              </div>
-            )}
           </div>
         </div>
       )}
