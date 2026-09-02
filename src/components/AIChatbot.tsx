@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useApp } from '@/context/AppContext';
 import { ChatMessage } from '@/lib/chatbotEngine';
+import { MOCK_EVENTS } from '@/lib/mockData';
 import { 
   Sparkles, 
   X, 
@@ -253,7 +254,7 @@ export default function AIChatbot({ onOpenEventDetail }: AIChatbotProps) {
                     {msg.suggestedEventIds && msg.suggestedEventIds.length > 0 && (
                       <div className="space-y-2 pt-1">
                         {msg.suggestedEventIds.map((eventId) => {
-                          const event = events.find(e => e.id === eventId || (e as any).slug === eventId);
+                          const event = events.find(e => e.id === eventId || (e as any).slug === eventId) || MOCK_EVENTS.find(e => e.id === eventId || (e as any).slug === eventId);
                           if (!event) return null;
                           return (
                             <div

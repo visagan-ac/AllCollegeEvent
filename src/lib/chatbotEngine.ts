@@ -10,7 +10,7 @@ export interface ChatMessage {
   quickReplies?: string[];
 }
 
-// 1. Common English Stopwords to filter out conversational noise
+// 1. Common English Stopwords to filter conversational noise
 const STOPWORDS = new Set([
   'i', 'want', 'an', 'a', 'the', 'in', 'on', 'at', 'with', 'and', 'or', 'for',
   'of', 'to', 'is', 'are', 'am', 'was', 'were', 'be', 'been', 'being', 'have',
@@ -52,7 +52,7 @@ const SYNONYMS: Record<string, string[]> = {
 };
 
 /**
- * Extracts and stems meaningful keywords from any conversational sentence
+ * Extracts and stems meaningful keywords from conversational sentences
  */
 export function extractKeywordsFromSentence(sentence: string): string[] {
   const cleaned = sentence.toLowerCase().replace(/[^\w\s₹$]/g, ' ');
@@ -63,7 +63,6 @@ export function extractKeywordsFromSentence(sentence: string): string[] {
   rawWords.forEach(word => {
     if (word.length >= 2 && !STOPWORDS.has(word)) {
       extracted.add(word);
-      // Also add root synonyms if available
       if (SYNONYMS[word]) {
         SYNONYMS[word].forEach(syn => extracted.add(syn));
       }
@@ -129,7 +128,7 @@ export function scoreEventByKeywords(event: EventItem, keywords: string[]): {
       kwMatched = true;
     }
 
-    // Weight 5: Event Type (Hackathon, Workshop, Competition) & Mode (Offline, Virtual)
+    // Weight 5: Event Type & Mode
     if (eventAttributes.type.includes(keyword) || eventAttributes.mode.includes(keyword)) {
       totalScore += 5;
       kwMatched = true;
@@ -160,7 +159,7 @@ export function scoreEventByKeywords(event: EventItem, keywords: string[]): {
 
 /**
  * AllCollegeEvent Native Cognitive AI Engine v3.5
- * Features Natural Language Sentence Keyword Extraction, Mapping, & Synthesis
+ * Minimal, Clean, and Ultra-Fast Responses
  */
 export function generateAIResponse(
   userQuery: string,
@@ -184,13 +183,13 @@ export function generateAIResponse(
   // =========================================================================
   if (query.includes('fastapi') || (query.includes('code') && (query.includes('python') || query.includes('api') || query.includes('backend')))) {
     return {
-      text: `💻 **Production FastAPI + PyTorch AI Inference Starter Boilerplate:**\n\n\`\`\`python
-from fastapi import FastAPI, HTTPException, status
+      text: `💻 **FastAPI + PyTorch Inference Boilerplate:**\n\n\`\`\`python
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 import torch
 
-app = FastAPI(title="Hackathon AI Service", version="1.0.0")
+app = FastAPI(title="Hackathon AI Microservice", version="1.0.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -218,15 +217,15 @@ async def run_inference(payload: FeaturePayload):
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
-\`\`\`\n\n📌 **Hackathon Tip:** Run with \`uvicorn main:app --reload\` to test your endpoints locally!`,
-      suggestedEventIds: events.slice(0, 2).map(e => e.id),
+\`\`\`\n\n📌 Run locally with \`uvicorn main:app --reload\`.`,
+      suggestedEventIds: events.slice(0, 3).map(e => e.id),
       quickReplies: ['How to containerize with Docker?', 'Show Next.js UI code', 'Show AI Hackathons']
     };
   }
 
   if (query.includes('solidity') || query.includes('smart contract') || (query.includes('code') && query.includes('web3'))) {
     return {
-      text: `💎 **Solidity ERC-721 Event Access Pass Smart Contract:**\n\n\`\`\`solidity
+      text: `💎 **Solidity ERC-721 Event Pass Smart Contract:**\n\n\`\`\`solidity
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
@@ -248,8 +247,8 @@ contract AllCollegeEventPass is ERC721URIStorage, Ownable {
         return tokenId;
     }
 }
-\`\`\`\n\n📌 **Tip:** Deploy on Sepolia Testnet or Polygon zkEVM using Hardhat or Foundry!`,
-      suggestedEventIds: events.filter(e => e.category.includes('Web3')).slice(0, 2).map(e => e.id),
+\`\`\`\n\n📌 Deploy on Sepolia Testnet or Polygon zkEVM.`,
+      suggestedEventIds: events.filter(e => e.category.includes('Web3')).slice(0, 3).map(e => e.id),
       quickReplies: ['How to deploy on Sepolia?', 'Show Web3 Hackathons', 'Pitching Web3 to jury']
     };
   }
@@ -259,8 +258,8 @@ contract AllCollegeEventPass is ERC721URIStorage, Ownable {
   // =========================================================================
   if (query.includes('how to win') || query.includes('pitch') || query.includes('jury') || query.includes('judg') || query.includes('strategy')) {
     return {
-      text: `🥇 **The 5-Step Hackathon Winning Playbook:**\n\n1. **The 60-Second Hook:** State the exact real-world problem and human impact before mentioning the tech stack.\n2. **The 3-Minute Presentation Formula:**\n   • **0:00 - 0:30:** Problem Statement & Real-World Cost\n   • **0:30 - 2:00:** **LIVE DEMO** (Show actual execution & edge cases)\n   • **2:00 - 2:30:** Technical Architecture (FastAPI, PyTorch, Next.js, ZK)\n   • **2:30 - 3:00:** Scalability & Future Monetization Roadmap\n3. **The 24-Hour Code Freeze:** Finish core features by Hour 24 so the last 12 hours are dedicated to UI polish and pitch rehearsal.`,
-      suggestedEventIds: events.slice(0, 2).map(e => e.id),
+      text: `🥇 **Top 3 Hackathon Winning Rules:**\n\n1. **The 60-Second Hook:** State the real problem and cost before showing code.\n2. **The 3-Minute Demo:** 30s Problem ➔ 90s Live Working Demo ➔ 30s Architecture ➔ 30s Scalability.\n3. **The 24-Hour Rule:** Complete core features by Hour 24 and polish UI/pitch for the remaining 12 hours.`,
+      suggestedEventIds: events.slice(0, 3).map(e => e.id),
       quickReplies: ['Show AI Project Ideas', 'FastAPI Starter Code', 'Top Hackathons with ₹5L Prize']
     };
   }
@@ -270,14 +269,14 @@ contract AllCollegeEventPass is ERC721URIStorage, Ownable {
   // =========================================================================
   if (/^(hi|hello|hey|greetings|hola|good morning|good afternoon|good evening|yo|sup)\b/i.test(query) && extractedKeywords.length <= 1) {
     return {
-      text: `👋 Hello **${userName}**! I am your **AllCollegeEvent AI Intelligence Copilot**.\n\nI am calibrated to your active profile in **${userDept}** (Year ${userYear}) targeting **${userRole}**.\n\n💡 **Try typing any sentence with your requirements, for example:**\n• *"I want an offline AI hackathon in Bengaluru with cash prizes"*\n• *"Show beginner friendly web3 workshops in Chennai"*\n• *"Find robotics and drone competitions with python"*\n\nI will split your sentence into keywords, map them across all 2,000+ opportunities, and return the best matches!`,
-      suggestedEventIds: events.slice(0, 2).map(e => e.id),
-      quickReplies: ['Offline AI Hackathons in Bengaluru', 'Web3 Workshops in Chennai', 'Competitions with ₹5L Cash Prize', 'FastAPI Starter Code']
+      text: `👋 Hello **${userName}**! What opportunities are you looking for today?\n\n• Type any sentence with your requirements (*e.g., "offline AI hackathons in Bengaluru with cash prizes"*).\n• Or ask for code templates (*FastAPI, React, Solidity*).`,
+      suggestedEventIds: events.slice(0, 3).map(e => e.id),
+      quickReplies: ['Offline AI in Bengaluru', 'Web3 in Chennai', 'Cash Prizes ₹5L', 'FastAPI Starter Code']
     };
   }
 
   // =========================================================================
-  // 5. NLP SENTENCE KEYWORD EXTRACTION & GRAPH MATCHING
+  // 5. NLP SENTENCE KEYWORD EXTRACTION & MINIMAL MATCHING OUTPUT
   // =========================================================================
   const scoredEvents = events.map(event => {
     const { score, matchedKeywords } = scoreEventByKeywords(event, extractedKeywords);
@@ -295,21 +294,18 @@ contract AllCollegeEventPass is ERC721URIStorage, Ownable {
 
     const matchDescriptions = topMatches.map((item, idx) => {
       const e = item.event;
-      const matchedChips = item.matchedKeywords.slice(0, 4).map(k => `\`${k}\``).join(' • ');
       return (
-        `**${idx + 1}. ${e.title}** (${e.type} • ${e.mode})\n` +
-        `• 🎯 **Matched Keywords:** ${matchedChips}\n` +
-        `• 🏛️ **Organizer & Venue:** ${e.organizer?.name || 'Premier Tech Alliance'} (${e.location.split(',')[0]})\n` +
-        `• 🏆 **Prize:** ${e.prizePool || 'Certificates & Mentorship'} • **Trust Score:** ${e.trustScore}/100\n` +
-        `• ⚡ **Prerequisites:** ${(e.requiredSkills || []).slice(0, 3).join(', ')}`
+        `**${idx + 1}. ${e.title}** (${e.mode} • ${e.location.split(',')[0]})\n` +
+        `• 🏆 **Prize:** ${e.prizePool || 'Certificates & Mentorship'} • **Trust:** ${e.trustScore}/100\n` +
+        `• ⚡ **Skills:** ${(e.requiredSkills || []).slice(0, 3).join(', ')}`
       );
     }).join('\n\n');
 
     return {
-      text: `🔍 **NLP Sentence Analysis:** I analyzed your sentence, extracted **${extractedKeywords.length} key attributes** (${extractedKeywords.slice(0, 5).map(k => `*${k}*`).join(', ')}), and mapped them across our 2,000+ opportunity graph:\n\n${matchDescriptions}\n\n👉 Click **Explore** on any card below to view full eligibility and claim your 1-click entry pass!`,
+      text: `✨ **Top matches for your requirements:**\n\n${matchDescriptions}\n\n👉 Click **Explore** below on any card to claim your 1-click entry pass!`,
       suggestedEventIds: topSuggestedIds,
       quickReplies: [
-        `Register for ${topMatches[0].event.title.slice(0, 22)}...`,
+        `Register for ${topMatches[0].event.title.slice(0, 20)}...`,
         'Show cash prizes',
         'FastAPI starter code',
         'How to win a hackathon?'
@@ -321,14 +317,13 @@ contract AllCollegeEventPass is ERC721URIStorage, Ownable {
   // 6. FALLBACK FOR GENERAL QUERIES
   // =========================================================================
   return {
-    text: `🔍 I analyzed your inquiry for "*${rawQuery}*". Here are the highest-rated opportunities from our 2,000+ event database that match your background in **${userDept}** targeting **${userRole}**:\n\n` +
+    text: `✨ Here are the top recommended opportunities for you in **${userDept}** targeting **${userRole}**:\n\n` +
       events.slice(0, 3).map((e, idx) => 
-        `**${idx + 1}. ${e.title}** (${e.type} • ${e.mode})\n` +
-        `• 🏛️ **Venue:** ${e.location}\n` +
-        `• 🏆 **Prize Pool:** ${e.prizePool || 'Certificates & Incubation'}\n` +
+        `**${idx + 1}. ${e.title}** (${e.mode} • ${e.location.split(',')[0]})\n` +
+        `• 🏆 **Prize:** ${e.prizePool || 'Certificates & Incubation'}\n` +
         `• ⚡ **Skills:** ${(e.requiredSkills || []).slice(0, 3).join(', ')}`
       ).join('\n\n') +
-      `\n\nClick **Explore** on any card below to see details or ask me to write code for your submission!`,
+      `\n\nClick **Explore** on any card below to view details!`,
     suggestedEventIds: events.slice(0, 3).map(e => e.id),
     quickReplies: ['Show cash prizes', 'FastAPI starter code', 'How to win hackathons?', 'Show offline events in Bengaluru']
   };

@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useApp } from '@/context/AppContext';
 import { RecommendationScore } from '@/lib/types';
+import { MOCK_EVENTS } from '@/lib/mockData';
 import EventCard from '@/components/EventCard';
 import AIExplainerModal from '@/components/AIExplainerModal';
 import EventDetailModal from '@/components/EventDetailModal';
@@ -150,9 +151,30 @@ export default function HomePage() {
   });
 
   const handleOpenEventById = (eventId: string) => {
-    const found = rankedRecommendations.find(r => r.event.id === eventId);
+    const found = rankedRecommendations.find(r => r.event.id === eventId || (r.event as any).slug === eventId);
     if (found) {
       setDetailedRecommendation(found);
+      return;
+    }
+    const evt = events.find(e => e.id === eventId || (e as any).slug === eventId) || MOCK_EVENTS.find(e => e.id === eventId || (e as any).slug === eventId);
+    if (evt) {
+      setDetailedRecommendation({
+        event: evt,
+        matchScore: 98,
+        matchedSkills: evt.requiredSkills?.slice(0, 3) || ['Python'],
+        missingSkillsToGain: evt.skillsGained?.slice(0, 2) || ['MLOps'],
+        careerBridgeImpact: 'Direct portfolio accelerator',
+        explanation: `Top matched opportunity for ${user?.department || 'Tech'} innovators.`,
+        matchTier: 'Perfect Match',
+        breakdown: {
+          skillMatchScore: 95,
+          careerGoalScore: 98,
+          departmentAffinity: 95,
+          interestAlignment: 90,
+          historyBoost: 90,
+          locationBonus: 95
+        }
+      });
     }
   };
 
