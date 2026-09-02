@@ -9,8 +9,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        background: "#060911",
+        foreground: "#f8fafc",
         brand: {
           50: '#f5f3ff',
           100: '#ede9fe',
@@ -22,18 +22,26 @@ module.exports = {
           700: '#6d28d9',
           800: '#5b21b6',
           900: '#4c1d95',
+          950: '#2e1065',
         },
-        accent: {
-          cyan: '#06b6d4',
-          emerald: '#10b981',
-          amber: '#f59e0b',
-          rose: '#f43f5e',
-          violet: '#8b5cf6'
+        electric: {
+          cyan: '#38bdf8',
+          purple: '#c084fc',
+          emerald: '#34d399',
+          amber: '#fbbf24',
+          rose: '#fb7185',
+          indigo: '#818cf8',
+        },
+        slate: {
+          850: '#111827',
+          900: '#0f172a',
+          950: '#070b14',
         }
       },
       fontFamily: {
-        sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
-        display: ['var(--font-outfit)', 'system-ui', 'sans-serif'],
+        sans: ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
+        display: ['Outfit', 'Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+        mono: ['Space Grotesk', 'monospace'],
       },
       animation: {
         'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
